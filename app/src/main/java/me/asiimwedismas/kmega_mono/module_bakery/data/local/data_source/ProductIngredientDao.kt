@@ -10,16 +10,13 @@ import java.util.concurrent.ExecutionException
 interface ProductIngredientDao {
 
     @Insert
-    suspend fun insert(productIngredient: BakeryProductIngredient)
-
-    @Insert
-    suspend fun insert(vararg productIngredient: BakeryProductIngredient)
+    suspend fun insert(vararg productIngredients: BakeryProductIngredient)
 
     @Update
-    suspend fun update(productIngredient: BakeryProductIngredient)
+    suspend fun update(vararg productIngredients: BakeryProductIngredient)
 
     @Delete
-    suspend fun delete(productIngredient: BakeryProductIngredient)
+    suspend fun delete(vararg productIngredients: BakeryProductIngredient)
 
     @Query("SELECT * FROM bakery_product_ingredients")
     fun getAllProductIngredients(): LiveData<List<BakeryProductIngredient>>

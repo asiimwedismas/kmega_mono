@@ -1,4 +1,4 @@
-package me.asiimwedismas.bakery_module.data.local.data_source
+package me.asiimwedismas.kmega_mono.module_bakery.data.local.data_source
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
@@ -10,16 +10,13 @@ import java.util.concurrent.ExecutionException
 interface ProductDao {
 
     @Insert
-    suspend fun insert(product: BakeryProduct)
-
-    @Insert
-    suspend fun insert(vararg product: BakeryProduct)
+    suspend fun insert(vararg products: BakeryProduct)
 
     @Update
-    suspend fun update(product: BakeryProduct)
+    suspend fun update(vararg products: BakeryProduct)
 
     @Delete
-    suspend fun delete(product: BakeryProduct)
+    suspend fun delete(vararg products: BakeryProduct)
 
     @Query("SELECT * FROM bakery_products ORDER BY product")
     fun getAllProducts(): LiveData<List<BakeryProduct>>

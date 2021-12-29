@@ -1,4 +1,4 @@
-package me.asiimwedismas.bakery_module.data.local.data_source
+package me.asiimwedismas.kmega_mono.module_bakery.data.local.data_source
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
@@ -9,16 +9,13 @@ import me.asiimwedismas.bakery_module.domain.model.BakeryIngredient
 interface IngredientDao {
 
     @Insert
-    suspend fun insert(ingredient: BakeryIngredient)
-
-    @Insert
-    suspend fun insert(vararg ingredient: BakeryIngredient)
+    suspend fun insert(vararg ingredients: BakeryIngredient)
 
     @Update
-    suspend fun update(ingredient: BakeryIngredient)
+    suspend fun update(vararg ingredients: BakeryIngredient)
 
     @Delete
-    suspend fun delete(ingredient: BakeryIngredient)
+    suspend fun delete(vararg ingredients: BakeryIngredient)
 
     @Query("SELECT * FROM bakery_ingredients ORDER BY ingredient_name")
     fun getAllIngredients(): LiveData<List<BakeryIngredient>>
