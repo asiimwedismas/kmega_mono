@@ -1,4 +1,4 @@
-package me.asiimwedismas.kmega_mono.di
+package me.asiimwedismas.kmega_mono.module_bakery.di
 
 import android.content.Context
 import androidx.room.Room
@@ -7,7 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import me.asiimwedismas.bakery_module.data.local.data_source.BakeryDatabase
+import me.asiimwedismas.kmega_mono.module_bakery.data.local.data_source.BakeryDatabase
 import javax.inject.Named
 
 @Module
