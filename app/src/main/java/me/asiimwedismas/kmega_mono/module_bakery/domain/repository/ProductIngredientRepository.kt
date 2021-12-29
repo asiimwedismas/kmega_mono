@@ -1,4 +1,5 @@
-package me.asiimwedismas.bakery_module.domain.repository
+package me.asiimwedismas.kmega_mono.module_bakery.domain.repository
 
-interface ProductIngredientRepository {
-}
+import me.asiimwedismas.bakery_module.data.local.data_source.ProductIngredientDao
+
+interface ProductIngredientRepository : ProductIngredientDao
