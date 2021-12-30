@@ -2,13 +2,14 @@ package me.asiimwedismas.kmega_mono.module_bakery.data.local.data_source
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import androidx.room.OnConflictStrategy.IGNORE
 import kotlinx.coroutines.flow.Flow
 import me.asiimwedismas.bakery_module.domain.model.BakeryIngredient
 
 @Dao
 interface IngredientDao {
 
-    @Insert
+    @Insert(onConflict = IGNORE)
     suspend fun insert(vararg ingredients: BakeryIngredient)
 
     @Update
