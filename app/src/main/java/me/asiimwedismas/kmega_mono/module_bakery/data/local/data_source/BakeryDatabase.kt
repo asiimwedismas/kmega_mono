@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import me.asiimwedismas.bakery_module.data.local.data_source.ProductIngredientDao
 import me.asiimwedismas.bakery_module.domain.model.BakeryIngredient
 import me.asiimwedismas.bakery_module.domain.model.BakeryProduct
-import me.asiimwedismas.bakery_module.domain.model.BakeryProductIngredient
+import me.asiimwedismas.kmega_mono.module_bakery.domain.model.BakeryProductIngredient
 
 @Database(
     entities = [BakeryProduct::class, BakeryProductIngredient::class, BakeryIngredient::class],

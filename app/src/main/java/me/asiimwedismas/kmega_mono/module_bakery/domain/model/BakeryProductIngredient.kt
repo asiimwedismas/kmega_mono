@@ -1,11 +1,10 @@
-package me.asiimwedismas.bakery_module.domain.model
+package me.asiimwedismas.kmega_mono.module_bakery.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "bakery_product_ingredients")
+@Entity(tableName = "bakery_product_ingredients", primaryKeys = ["product_name", "ingredient"])
 data class BakeryProductIngredient(
-    @PrimaryKey var id: Int,
     var product_name: String,
     var ingredient: String,
     var quantity: Double,
