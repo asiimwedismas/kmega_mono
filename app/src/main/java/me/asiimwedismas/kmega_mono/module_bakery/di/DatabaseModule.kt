@@ -8,7 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import me.asiimwedismas.kmega_mono.module_bakery.data.local.data_source.BakeryDatabase
-import me.asiimwedismas.bakery_module.other.Constants.LOCAL_DB
+import me.asiimwedismas.kmega_mono.common.Constants.LOCAL_DB
 import javax.inject.Singleton
 
 @Module
