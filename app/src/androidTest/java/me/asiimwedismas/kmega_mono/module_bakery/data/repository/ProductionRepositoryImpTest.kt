@@ -11,8 +11,6 @@ import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.test.runTest
 import me.asiimwedismas.kmega_mono.module_bakery.domain.model.FactoryProductionSheet
 import me.asiimwedismas.kmega_mono.module_bakery.domain.repository.ProductionRepository
@@ -55,14 +53,23 @@ class ProductionRepositoryImpTest {
             firestore.firestoreSettings = firestoreSettings {
                 isPersistenceEnabled = false
             }
-        } catch (e : IllegalStateException){}
+        } catch (e: IllegalStateException) {
+        }
 
         hiltRule.inject()
     }
 
     @After
-    fun tearDown(){
+    fun tearDown() {
         firestore.collection("v2").document("bakery").delete()
+    }
+
+    private suspend fun insertSheets() {
+        repository.saveProductionSheet(sheet0)
+        repository.saveProductionSheet(sheet1)
+        repository.saveProductionSheet(sheet2)
+        repository.saveProductionSheet(sheet3)
+        repository.saveProductionSheet(sheet4)
     }
 
     @Test
@@ -75,9 +82,7 @@ class ProductionRepositoryImpTest {
 
     @Test
     fun getProductionSheetForDate() = runTest {
-        repository.saveProductionSheet(sheet0)
-        repository.saveProductionSheet(sheet1)
-        repository.saveProductionSheet(sheet2)
+        insertSheets()
 
         val sheet = repository.getProductionSheetForDate("sheet1")
         Truth.assertThat(sheet).isEqualTo(sheet1)
@@ -85,25 +90,17 @@ class ProductionRepositoryImpTest {
 
     @Test
     fun getProductionSheetsInRange() = runTest {
-        repository.saveProductionSheet(sheet0)
-        repository.saveProductionSheet(sheet1)
-        repository.saveProductionSheet(sheet2)
-        repository.saveProductionSheet(sheet3)
-        repository.saveProductionSheet(sheet4)
+        insertSheets()
 
-        val sheet = repository.getProductionSheetsInRange(1,3)
+        val sheet = repository.getProductionSheetsInRange(1, 3)
         Truth.assertThat(sheet).containsExactly(sheet1, sheet2, sheet3)
     }
 
     @Test
     fun returnEmptyList() = runTest {
-        repository.saveProductionSheet(sheet0)
-        repository.saveProductionSheet(sheet1)
-        repository.saveProductionSheet(sheet2)
-        repository.saveProductionSheet(sheet3)
-        repository.saveProductionSheet(sheet4)
+        insertSheets()
 
-        val sheet = repository.getProductionSheetsInRange(6,7)
+        val sheet = repository.getProductionSheetsInRange(6, 7)
         Truth.assertThat(sheet).isEmpty()
     }
 }

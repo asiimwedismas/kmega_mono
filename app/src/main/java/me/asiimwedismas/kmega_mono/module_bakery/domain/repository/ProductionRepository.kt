@@ -6,7 +6,7 @@ interface ProductionRepository {
 
     suspend fun saveProductionSheet(productionSheet: FactoryProductionSheet)
 
-    suspend fun getProductionSheetForDate(date: String): FactoryProductionSheet?
+    suspend fun getProductionSheetForDate(date: String): FactoryProductionSheet
 
     suspend fun getProductionSheetsInRange(from: Long, to: Long): List<FactoryProductionSheet>
 }

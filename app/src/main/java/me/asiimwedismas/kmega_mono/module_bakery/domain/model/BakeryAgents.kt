@@ -1,5 +1,7 @@
-package me.asiimwedismas.bakery_module.domain.model
+package me.asiimwedismas.kmega_mono.module_bakery.domain.model
 
-data class BakeryAgents(
+data class
+
+BakeryAgents(
     var agents: List<String> = ArrayList()
 )

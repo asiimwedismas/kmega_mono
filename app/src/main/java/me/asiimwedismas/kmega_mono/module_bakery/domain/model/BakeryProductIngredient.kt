@@ -5,8 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "bakery_product_ingredients", primaryKeys = ["product_name", "ingredient"])
 data class BakeryProductIngredient(
-    var product_name: String,
-    var ingredient: String,
-    var quantity: Double,
-    var amount: Double,
+    var product_name: String = "",
+    var ingredient: String = "",
+    var quantity:  Double = 0.0,
+    var amount:  Int = 0,
 )

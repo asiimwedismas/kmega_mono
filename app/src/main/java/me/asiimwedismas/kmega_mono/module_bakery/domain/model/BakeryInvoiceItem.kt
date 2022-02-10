@@ -1,16 +1,15 @@
-package me.asiimwedismas.bakery_module.domain.model
+package me.asiimwedismas.kmega_mono.module_bakery.domain.model
 
 data class BakeryInvoiceItem(
-    var product_name: String,
+    var product_name: String = "",
     var qty: Int = 0,
-    var factory_profit: Double = 0.0,
-    var outlet_profit: Double = 0.0,
-    var agent_profit: Double = 0.0,
-    var total_agent_sale: Double = 0.0,
-    var total_factory_sale: Double = 0.0,
-    var total_outlet_sale: Double = 0.0
-) {
-}
+    var factory_profit: Int = 0,
+    var outlet_profit:  Int = 0,
+    var agent_profit:  Int = 0,
+    var total_agent_sale:  Int = 0,
+    var total_factory_sale:  Int = 0,
+    var total_outlet_sale:  Int = 0
+)
 
 fun BakeryInvoiceItem.calculateSalesAndProfits(product: BakeryProduct) {
 
