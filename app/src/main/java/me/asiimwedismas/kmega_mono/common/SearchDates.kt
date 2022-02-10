@@ -12,7 +12,7 @@ class SearchDates(
     val selectedDate: MutableLiveData<String> = MutableLiveData<String>("")
     val previousDate: MutableLiveData<String> = MutableLiveData<String>("")
     val nextDate: MutableLiveData<String> = MutableLiveData<String>("")
-    var calenderInstance: MutableLiveData<Calendar> = calenderInstance
+    var instance: MutableLiveData<Calendar> = calenderInstance
         set(calenderInstance) {
             field = calenderInstance
             setDates()
@@ -23,7 +23,7 @@ class SearchDates(
     }
 
     private fun setDates() {
-        calenderInstance.value?.let {
+        instance.value?.let {
             selectedDate.value = dateFormat.format(it.time)
             previousDate.value = dateFormat.format(it.getPreviousDate().time)
             nextDate.value = dateFormat.format(it.getNextDate().time)
