@@ -5,17 +5,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import me.asiimwedismas.bakery_module.other.Constants
 import me.asiimwedismas.kmega_mono.module_bakery.data.local.data_source.BakeryDatabase
-import me.asiimwedismas.kmega_mono.module_bakery.domain.repository.IngredientRepository
-import me.asiimwedismas.kmega_mono.module_bakery.domain.repository.ProductIngredientRepository
-import me.asiimwedismas.kmega_mono.module_bakery.domain.repository.ProductRepository
-import me.asiimwedismas.kmega_mono.module_bakery.data.repository.IngredientRepositoryImp
-import me.asiimwedismas.kmega_mono.module_bakery.data.repository.ProductIngredientRepositoryImp
-import me.asiimwedismas.kmega_mono.module_bakery.data.repository.ProductRepositoryImp
-import me.asiimwedismas.kmega_mono.module_bakery.data.repository.ProductionRepositoryImp
-import me.asiimwedismas.kmega_mono.module_bakery.domain.repository.ProductionRepository
-import javax.inject.Named
+import me.asiimwedismas.kmega_mono.module_bakery.data.repository.*
+import me.asiimwedismas.kmega_mono.module_bakery.domain.repository.*
 import javax.inject.Singleton
 
 @Module
@@ -37,12 +29,48 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideIngredientRepository(
-        db: BakeryDatabase,
+        db: BakeryDatabase
     ): IngredientRepository = IngredientRepositoryImp(db.ingredientDao())
 
     @Provides
     @Singleton
     fun provideProductionRepository(
-        @Named(Constants.PRODUCTION_COLLECTION)  collectionReference: CollectionReference
+        @V1Production  collectionReference: CollectionReference
     ): ProductionRepository = ProductionRepositoryImp(collectionReference)
+
+    @Provides
+    @Singleton
+    fun provideDispatchRepository(
+        @V1DispatchCollection  collectionReference: CollectionReference
+    ): DispatchesRepository = DispatchesRepositoryImp(collectionReference)
+
+    @Provides
+    @Singleton
+    fun provideAgentRepository(
+        @V1AgentDeliveryCollection collectionReference: CollectionReference
+    ): AgentRepository = AgentRepositoryImp(collectionReference)
+
+    @Provides
+    @Singleton
+    fun provideOutletRepository(
+        @V1OutletDeliveryCollection collectionReference: CollectionReference
+    ): OutletRepository = OutletRepositoryImp(collectionReference)
+
+    @Provides
+    @Singleton
+    fun provideAuditRepository(
+        @V1AuditCollection collectionReference: CollectionReference
+    ): AuditRepository = AuditRepositoryImp(collectionReference)
+
+    @Provides
+    @Singleton
+    fun provideExpiredRepository(
+        @V1ExpiredCollection collectionReference: CollectionReference
+    ): ExpiredRepository = ExpiredRepositoryImp(collectionReference)
+
+    @Provides
+    @Singleton
+    fun provideReturnRepository(
+        @V1ReturnsCollection collectionReference: CollectionReference
+    ): ReturnRepository = ReturnRepositoryImp(collectionReference)
 }
