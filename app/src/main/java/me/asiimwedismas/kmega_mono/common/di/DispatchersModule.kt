@@ -6,7 +6,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -15,17 +14,17 @@ object DispatchersModule {
 
     @Provides
     @Singleton
-    fun providesDispatchers(): DispatcherProvider = ProductionDispatchers()
+    fun providesDispatchers(): CoroutineDispatchersProvider = LiveCoroutineDispatchers()
 }
 
-interface DispatcherProvider{
+interface CoroutineDispatchersProvider{
     val main : CoroutineDispatcher
     val io : CoroutineDispatcher
     val default: CoroutineDispatcher
     val unconfined: CoroutineDispatcher
 }
 
-class ProductionDispatchers : DispatcherProvider{
+class LiveCoroutineDispatchers : CoroutineDispatchersProvider{
     override val main: CoroutineDispatcher
         get() = Dispatchers.Main
     override val io: CoroutineDispatcher
