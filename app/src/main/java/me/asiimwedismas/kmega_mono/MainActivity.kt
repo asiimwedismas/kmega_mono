@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             Kmega_monoTheme {
-                BakeryReport()
+                ProductionScreen()
             }
         }
     }

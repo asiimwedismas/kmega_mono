@@ -35,42 +35,42 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideProductionRepository(
-        @V1Production  collectionReference: CollectionReference
+        @ProductionCollection  collectionReference: CollectionReference
     ): ProductionRepository = ProductionRepositoryImp(collectionReference)
 
     @Provides
     @Singleton
     fun provideDispatchRepository(
-        @V1DispatchCollection  collectionReference: CollectionReference
+        @DispatchedCollection  collectionReference: CollectionReference
     ): DispatchesRepository = DispatchesRepositoryImp(collectionReference)
 
     @Provides
     @Singleton
     fun provideAgentRepository(
-        @V1AgentDeliveryCollection collectionReference: CollectionReference
+        @AuditCollection collectionReference: CollectionReference
     ): AgentRepository = AgentRepositoryImp(collectionReference)
 
     @Provides
     @Singleton
     fun provideOutletRepository(
-        @V1OutletDeliveryCollection collectionReference: CollectionReference
+        @OutletDeliveryCollection collectionReference: CollectionReference
     ): OutletRepository = OutletRepositoryImp(collectionReference)
 
     @Provides
     @Singleton
     fun provideAuditRepository(
-        @V1AuditCollection collectionReference: CollectionReference
+        @AuditCollection collectionReference: CollectionReference
     ): AuditRepository = AuditRepositoryImp(collectionReference)
 
     @Provides
     @Singleton
     fun provideExpiredRepository(
-        @V1ExpiredCollection collectionReference: CollectionReference
+        @ExpiredCollection collectionReference: CollectionReference
     ): ExpiredRepository = ExpiredRepositoryImp(collectionReference)
 
     @Provides
     @Singleton
     fun provideReturnRepository(
-        @V1ReturnsCollection collectionReference: CollectionReference
+        @ReturnsCollection collectionReference: CollectionReference
     ): ReturnRepository = ReturnRepositoryImp(collectionReference)
 }

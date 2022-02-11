@@ -7,6 +7,13 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import me.asiimwedismas.kmega_mono.common.Constants.AGENT_DELIVERY_COLLECTION
+import me.asiimwedismas.kmega_mono.common.Constants.AUDIT_COLLECTION
+import me.asiimwedismas.kmega_mono.common.Constants.DISPATCH_COLLECTION
+import me.asiimwedismas.kmega_mono.common.Constants.EXPIRED_COLLECTION
+import me.asiimwedismas.kmega_mono.common.Constants.OUTLET_DELIVERY_COLLECTION
+import me.asiimwedismas.kmega_mono.common.Constants.PRODUCTION_COLLECTION
+import me.asiimwedismas.kmega_mono.common.Constants.RETURNS_COLLECTION
 import me.asiimwedismas.kmega_mono.common.Constants.v2_BAKERY
 import javax.inject.Named
 import javax.inject.Qualifier
@@ -14,89 +21,89 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object BakeryV2FirebaseModule {
+object BakeryFirebaseModule {
 
     @Provides
     @Singleton
     @Named(v2_BAKERY)
-    fun provideV2BakeryDocument(): DocumentReference {
+    fun provideBakeryDocument(): DocumentReference {
         return Firebase.firestore.collection("v2").document("bakery")
     }
 
     @Provides
     @Singleton
-    @V2Production
+    @ProductionCollection
     fun provideProductionCollection(
         @Named(v2_BAKERY) bakeryDocument: DocumentReference,
-    ) = bakeryDocument.collection("production")
+    ) = bakeryDocument.collection(PRODUCTION_COLLECTION)
 
     @Provides
     @Singleton
-    @V2DispatchCollection
+    @DispatchedCollection
     fun provideDispatchCollection(
         @Named(v2_BAKERY) bakeryDocument: DocumentReference,
-    ) = bakeryDocument.collection("dispatch")
+    ) = bakeryDocument.collection(DISPATCH_COLLECTION)
 
     @Provides
     @Singleton
-    @V2OutletDeliveryCollection
+    @OutletDeliveryCollection
     fun provideOutletDeliveryCollection(
         @Named(v2_BAKERY) bakeryDocument: DocumentReference,
-    ) = bakeryDocument.collection("outlet_delivery")
+    ) = bakeryDocument.collection(OUTLET_DELIVERY_COLLECTION)
 
     @Provides
     @Singleton
-    @V2AgentDeliveryCollection
+    @AgentDeliveryCollection
     fun provideAgentDeliveryCollection(
         @Named(v2_BAKERY) bakeryDocument: DocumentReference,
-    ) = bakeryDocument.collection("agent_delivery")
+    ) = bakeryDocument.collection(AGENT_DELIVERY_COLLECTION)
 
     @Provides
     @Singleton
-    @V2ReturnsCollection
+    @ReturnsCollection
     fun provideReturnsCollection(
         @Named(v2_BAKERY) bakeryDocument: DocumentReference,
-    ) = bakeryDocument.collection("returns")
+    ) = bakeryDocument.collection(RETURNS_COLLECTION)
 
     @Provides
     @Singleton
-    @V2ExpiredCollection
+    @ExpiredCollection
     fun provideExpiredCollection(
         @Named(v2_BAKERY) bakeryDocument: DocumentReference,
-    ) = bakeryDocument.collection("expired")
+    ) = bakeryDocument.collection(EXPIRED_COLLECTION)
 
     @Provides
     @Singleton
-    @V2AuditCollection
+    @AuditCollection
     fun provideAuditCollection(
         @Named(v2_BAKERY) bakeryDocument: DocumentReference,
-    ) = bakeryDocument.collection("audit")
+    ) = bakeryDocument.collection(AUDIT_COLLECTION)
 }
 
 @Retention(AnnotationRetention.BINARY)
 @Qualifier
-annotation class V2Production
+annotation class ProductionCollection
 
 @Retention(AnnotationRetention.BINARY)
 @Qualifier
-annotation class V2DispatchCollection
+annotation class DispatchedCollection
 
 @Retention(AnnotationRetention.BINARY)
 @Qualifier
-annotation class V2OutletDeliveryCollection
+annotation class OutletDeliveryCollection
 
 @Retention(AnnotationRetention.BINARY)
 @Qualifier
-annotation class V2AgentDeliveryCollection
+annotation class AgentDeliveryCollection
 
 @Retention(AnnotationRetention.BINARY)
 @Qualifier
-annotation class V2ExpiredCollection
+annotation class ExpiredCollection
 
 @Retention(AnnotationRetention.BINARY)
 @Qualifier
-annotation class V2ReturnsCollection
+annotation class ReturnsCollection
 
 @Retention(AnnotationRetention.BINARY)
 @Qualifier
-annotation class V2AuditCollection
+annotation class AuditCollection
