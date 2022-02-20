@@ -24,12 +24,7 @@ class BakeryInvoiceItemTest {
             3_800
         )
 
-        breadInvoiceItem = BakeryInvoiceItem(
-            "Bread",
-            1
-        )
-
-        breadInvoiceItem.calculateSalesAndProfits(bread)
+        breadInvoiceItem = BakeryInvoiceItem(bread, 1)
     }
 
     @Test

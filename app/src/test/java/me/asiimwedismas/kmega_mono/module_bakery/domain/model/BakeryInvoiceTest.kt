@@ -35,12 +35,8 @@ class BakeryInvoiceTest {
 
     @Before
     fun setUp() {
-        val bun = BakeryInvoiceItem("Bun", 1).also {
-            it.calculateSalesAndProfits(bun)
-        }
-        val bread = BakeryInvoiceItem("Bread", 1).also {
-            it.calculateSalesAndProfits(bread)
-        }
+        val bun = BakeryInvoiceItem(bun, 1)
+        val bread = BakeryInvoiceItem(bread, 1)
 
         invoice = BakeryInvoice(
             items_list = listOf(bun, bread)

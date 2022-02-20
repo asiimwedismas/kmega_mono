@@ -9,27 +9,33 @@ data class BakeryInvoiceItem(
     var total_agent_sale: Int = 0,
     var total_factory_sale: Int = 0,
     var total_outlet_sale: Int = 0,
-)
+) {
+    constructor(product: BakeryProduct, qty: Int) : this(product_name = product.product,
+        qty = qty) {
+        calculateSalesAndProfits(product)
+    }
 
-fun BakeryInvoiceItem.calculateSalesAndProfits(product: BakeryProduct) {
+    private fun calculateSalesAndProfits(product: BakeryProduct) {
 
-    val wholesalePrice = product.wholesale_price
-    val retailPrice = product.retail_price
-    val agentPrice = product.agent_price
-    val outPerBag = product.out_per_bag
-    val packagePerBag = product.kavera * outPerBag
-    val ingredientsCostPerBag = product.ingredients_cost_per_bag
-    val bagProductionCost = ingredientsCostPerBag + packagePerBag
+        val wholesalePrice = product.wholesale_price
+        val retailPrice = product.retail_price
+        val agentPrice = product.agent_price
+        val outPerBag = product.out_per_bag
+        val packagePerBag = product.kavera * outPerBag
+        val ingredientsCostPerBag = product.ingredients_cost_per_bag
+        val bagProductionCost = ingredientsCostPerBag + packagePerBag
 
-    val factoryBagProfitGross = (outPerBag * wholesalePrice - bagProductionCost)
-    val outletBagProfitGross = (outPerBag * retailPrice - bagProductionCost)
-    val agentBagProfitGross = (outPerBag * agentPrice - bagProductionCost)
+        val factoryBagProfitGross = (outPerBag * wholesalePrice - bagProductionCost)
+        val outletBagProfitGross = (outPerBag * retailPrice - bagProductionCost)
+        val agentBagProfitGross = (outPerBag * agentPrice - bagProductionCost)
 
-    total_factory_sale = wholesalePrice * qty
-    total_outlet_sale = retailPrice * qty
-    total_agent_sale = agentPrice * qty
+        total_factory_sale = wholesalePrice * qty
+        total_outlet_sale = retailPrice * qty
+        total_agent_sale = agentPrice * qty
 
-    factory_profit = factoryBagProfitGross / outPerBag * qty
-    outlet_profit = outletBagProfitGross / outPerBag * qty
-    agent_profit = agentBagProfitGross / outPerBag * qty
+        factory_profit = factoryBagProfitGross / outPerBag * qty
+        outlet_profit = outletBagProfitGross / outPerBag * qty
+        agent_profit = agentBagProfitGross / outPerBag * qty
+    }
 }
+
