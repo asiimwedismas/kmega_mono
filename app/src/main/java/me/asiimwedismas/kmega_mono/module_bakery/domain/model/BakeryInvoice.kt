@@ -1,13 +1,30 @@
 package me.asiimwedismas.kmega_mono.module_bakery.domain.model
 
 enum class InvoiceType {
-    DISPATACH,
+    DISPATCH,
     OUTLET_DELIVERY,
     AGENT_DELIVERY,
-    PRODUCTION,
     RETURNS,
     AUDIT,
-    EXPIRED
+    EXPIRED;
+
+    companion object{
+        @Throws(IllegalArgumentException::class)
+        fun fromString(type: String): InvoiceType {
+            return when (type) {
+                DISPATCH.name -> DISPATCH
+                OUTLET_DELIVERY.name -> OUTLET_DELIVERY
+                AGENT_DELIVERY.name -> AGENT_DELIVERY
+                RETURNS.name -> RETURNS
+                AUDIT.name -> AUDIT
+                EXPIRED.name -> EXPIRED
+
+                else -> {
+                    throw IllegalArgumentException("Wrong category")
+                }
+            }
+        }
+    }
 }
 
 data class BakeryInvoice(
@@ -17,6 +34,7 @@ data class BakeryInvoice(
     var date: String? = null,
     var utc: Long = 0,
     var isLocked: Boolean = false,
+    var type: String? = null,
     var salesman_id: String = "",
     var salesman_name: String = "",
     var outlet_id: String? = null,
@@ -24,23 +42,32 @@ data class BakeryInvoice(
     var agent_id: String? = null,
     var agent_name: String? = null,
     var care_of: String? = null,
-    var items_list: List<BakeryInvoiceItem> = ArrayList(),
+    var items_list: MutableList<BakeryInvoiceItem> = ArrayList(),
 )
 
 val BakeryInvoice.totalOutletSale
     get() = items_list.sumOf { it.total_outlet_sale }
 
-val BakeryInvoice.totalOutletProfit
-    get() = items_list.sumOf { it.outlet_profit }
+val BakeryInvoice.totalOutletProfitGross
+    get() = items_list.sumOf { it.outlet_profit_gross }
 
 val BakeryInvoice.totalAgentSale
     get() = items_list.sumOf { it.total_agent_sale }
 
-val BakeryInvoice.totalAgentProfit
-    get() = items_list.sumOf { it.agent_profit }
+val BakeryInvoice.totalAgentProfitGross
+    get() = items_list.sumOf { it.agent_profit_gross }
 
 val BakeryInvoice.totalFactorySale
     get() = items_list.sumOf { it.total_factory_sale }
 
-val BakeryInvoice.totalFactoryProfit
-    get() = items_list.sumOf { it.factory_profit }
+val BakeryInvoice.totalFactoryProfitGross
+    get() = items_list.sumOf { it.factory_profit_gross }
+
+val BakeryInvoice.totalFactoryProfitNet
+    get() = items_list.sumOf { it.factory_profit_net }
+
+val BakeryInvoice.totalAgentProfitNet
+    get() = items_list.sumOf { it.agent_profit_net }
+
+val BakeryInvoice.totalOutletProfitNet
+    get() = items_list.sumOf { it.outlet_profit_net }

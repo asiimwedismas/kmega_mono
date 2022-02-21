@@ -18,58 +18,59 @@ class BakeryInvoiceTest {
         65_700,
         3_800
     )
-
-    private val bun = BakeryProduct(
-        "Bun",
-        6,
-        75,
-        250,
-        1_000,
-        1_000,
-        172_475,
-        65_700,
-        900
-    )
-
     lateinit var invoice: BakeryInvoice
 
     @Before
     fun setUp() {
-        val bun = BakeryInvoiceItem(bun, 1)
         val bread = BakeryInvoiceItem(bread, 1)
 
         invoice = BakeryInvoice(
-            items_list = listOf(bun, bread)
+            items_list = mutableListOf(bread, bread)
         )
     }
 
     @Test
     fun calculateTotalFactoryProfit() {
-        Truth.assertThat(invoice.totalFactoryProfit).isEqualTo(1_783)
+        Truth.assertThat(invoice.totalFactoryProfitGross).isEqualTo(3096)
     }
 
     @Test
     fun calculateTotalOutletProfit() {
-        Truth.assertThat(invoice.totalOutletProfit).isEqualTo(1_983)
+        Truth.assertThat(invoice.totalOutletProfitGross).isEqualTo(3496)
     }
 
     @Test
     fun calculateTotalAgentProfit() {
-        Truth.assertThat(invoice.totalAgentProfit).isEqualTo(1_483)
+        Truth.assertThat(invoice.totalAgentProfitGross).isEqualTo(2696)
     }
 
     @Test
     fun calculateTotalTotalAgentSale() {
-        Truth.assertThat(invoice.totalAgentSale).isEqualTo(4_700)
+        Truth.assertThat(invoice.totalAgentSale).isEqualTo(7600)
     }
 
     @Test
     fun calculateTotalFactorySale() {
-        Truth.assertThat(invoice.totalFactorySale).isEqualTo(5_000)
+        Truth.assertThat(invoice.totalFactorySale).isEqualTo(8000)
     }
 
     @Test
     fun calculateTotalOutletSale() {
-        Truth.assertThat(invoice.totalOutletSale).isEqualTo(5_200)
+        Truth.assertThat(invoice.totalOutletSale).isEqualTo(8400)
+    }
+
+    @Test
+    fun calculateTotalFactoryProfitNet() {
+        Truth.assertThat(invoice.totalFactoryProfitNet).isEqualTo(1270)
+    }
+
+    @Test
+    fun calculateTotalOutletProfitNet() {
+        Truth.assertThat(invoice.totalOutletProfitNet).isEqualTo(1670)
+    }
+
+    @Test
+    fun calculateTotalAgentProfitNet() {
+        Truth.assertThat(invoice.totalAgentProfitNet).isEqualTo(870)
     }
 }

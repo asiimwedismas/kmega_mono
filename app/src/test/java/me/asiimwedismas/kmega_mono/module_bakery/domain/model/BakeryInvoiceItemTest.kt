@@ -34,7 +34,7 @@ class BakeryInvoiceItemTest {
 
     @Test
     fun `factory profits are calculated properly`() {
-        assertThat(breadInvoiceItem.factory_profit).isEqualTo(1_548)
+        assertThat(breadInvoiceItem.factory_profit_gross).isEqualTo(1_548)
     }
 
     @Test
@@ -44,7 +44,7 @@ class BakeryInvoiceItemTest {
 
     @Test
     fun `outlet profits are calculated properly`() {
-        assertThat(breadInvoiceItem.outlet_profit).isEqualTo(1_748)
+        assertThat(breadInvoiceItem.outlet_profit_gross).isEqualTo(1_748)
     }
 
     @Test
@@ -54,6 +54,21 @@ class BakeryInvoiceItemTest {
 
     @Test
     fun `agent profits are calculated properly`() {
-        assertThat(breadInvoiceItem.agent_profit).isEqualTo(1_348)
+        assertThat(breadInvoiceItem.agent_profit_gross).isEqualTo(1_348)
+    }
+
+    @Test
+    fun `agent net profits are calculated properly`() {
+        assertThat(breadInvoiceItem.agent_profit_net).isEqualTo(435)
+    }
+
+    @Test
+    fun `factory net profits are calculated properly`() {
+        assertThat(breadInvoiceItem.factory_profit_net).isEqualTo(635)
+    }
+
+    @Test
+    fun `outlet net profits are calculated properly`() {
+        assertThat(breadInvoiceItem.outlet_profit_net).isEqualTo(835)
     }
 }
