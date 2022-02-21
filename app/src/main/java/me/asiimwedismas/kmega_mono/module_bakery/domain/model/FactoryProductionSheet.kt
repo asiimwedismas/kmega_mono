@@ -9,7 +9,7 @@ data class FactoryProductionSheet(
     var document_author_name: String? = null,
     var utc: Long = 0,
     var lock_status: Boolean = false,
-    var items: List<FactoryProductionItem> = ArrayList(),
+    var items: MutableList<FactoryProductionItem> = ArrayList(),
 )
 
 val FactoryProductionSheet.totalBuvera
@@ -24,5 +24,8 @@ val FactoryProductionSheet.totalFixedCosts
 val FactoryProductionSheet.totalWholeSales
     get() = items.sumOf { it.wholesale_sales }
 
-val FactoryProductionSheet.totalprofiNoFixedCop
-    get() = items.sumOf { it.profit_no_fixed_cop }
+val FactoryProductionSheet.totalGrossProfit
+    get() = items.sumOf { it.profit_gross }
+
+val FactoryProductionSheet.totalNetProfit
+    get() = items.sumOf{it.profit_net}
