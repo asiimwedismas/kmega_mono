@@ -8,7 +8,7 @@ import me.asiimwedismas.kmega_mono.module_bakery.domain.model.BakeryIngredient
 import me.asiimwedismas.kmega_mono.module_bakery.domain.repository.IngredientRepository
 
 class IngredientRepositoryImp(
-    private val dao: IngredientDao
+    private val dao: IngredientDao,
 ) : IngredientRepository {
 
     override suspend fun insert(ingredients: List<BakeryIngredient>) {

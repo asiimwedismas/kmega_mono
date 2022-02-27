@@ -8,6 +8,11 @@ import me.asiimwedismas.kmega_mono.module_bakery.domain.repository.DispatchesRep
 class DispatchesRepositoryImp(
     private val collectionReference: CollectionReference,
 ) : DispatchesRepository {
+
+    override suspend fun delete(invoiceID: String) {
+        collectionReference.document(invoiceID).delete().await()
+    }
+
     override suspend fun saveDispatch(invoice: BakeryInvoice) {
         if (invoice.document_id.isEmpty()) {
             invoice.document_id = collectionReference.document().id

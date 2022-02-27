@@ -8,6 +8,11 @@ import me.asiimwedismas.kmega_mono.module_bakery.domain.repository.ExpiredReposi
 class ExpiredRepositoryImp(
     private val collectionReference: CollectionReference,
 ) : ExpiredRepository {
+
+    override suspend fun delete(invoiceID: String) {
+        collectionReference.document(invoiceID).delete().await()
+    }
+
     override suspend fun saveExpired(invoice: BakeryInvoice) {
         if (invoice.document_id.isEmpty()) {
             invoice.document_id = collectionReference.document().id

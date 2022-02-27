@@ -4,6 +4,8 @@ import me.asiimwedismas.kmega_mono.module_bakery.domain.model.BakeryInvoice
 
 interface AgentRepository {
 
+    suspend fun delete(invoiceID: String)
+
     suspend fun saveAgentDelivery(invoice: BakeryInvoice)
 
     suspend fun getAgentDeliveriesBySalesmanForDate(salesmanID: String, date: String): List<BakeryInvoice>

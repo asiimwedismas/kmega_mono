@@ -8,6 +8,10 @@ import me.asiimwedismas.kmega_mono.module_bakery.domain.repository.AgentReposito
 class AgentRepositoryImp(
     private val collectionReference: CollectionReference,
 ) : AgentRepository {
+    override suspend fun delete(invoiceID: String) {
+        collectionReference.document(invoiceID).delete().await()
+    }
+
     override suspend fun saveAgentDelivery(invoice: BakeryInvoice) {
         if (invoice.document_id.isEmpty()) {
             invoice.document_id = collectionReference.document().id

@@ -3,6 +3,7 @@ package me.asiimwedismas.kmega_mono.module_bakery.domain.repository
 import me.asiimwedismas.kmega_mono.module_bakery.domain.model.BakeryInvoice
 
 interface OutletRepository {
+    suspend fun delete(invoiceID: String)
 
     suspend fun saveDelivery(invoice: BakeryInvoice)
 

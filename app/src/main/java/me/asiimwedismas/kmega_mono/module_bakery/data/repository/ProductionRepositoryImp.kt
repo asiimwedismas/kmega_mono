@@ -9,6 +9,10 @@ class ProductionRepositoryImp(
     private val collectionReference: CollectionReference,
 ) : ProductionRepository {
 
+    override suspend fun delete(sheetID: String) {
+        collectionReference.document(sheetID).delete().await()
+    }
+
     override suspend fun saveProductionSheet(productionSheet: FactoryProductionSheet) {
         if (productionSheet.document_id.isEmpty()) {
             productionSheet.document_id = productionSheet.date

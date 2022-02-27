@@ -8,6 +8,11 @@ import me.asiimwedismas.kmega_mono.module_bakery.domain.repository.ReturnReposit
 class ReturnRepositoryImp(
     private val collectionReference: CollectionReference,
 ) : ReturnRepository {
+
+    override suspend fun delete(invoiceID: String) {
+        collectionReference.document(invoiceID).delete().await()
+    }
+
     override suspend fun saveReturn(invoice: BakeryInvoice) {
         if (invoice.document_id.isEmpty()) {
             invoice.document_id = collectionReference.document().id
@@ -26,7 +31,7 @@ class ReturnRepositoryImp(
             .get()
             .await()
             .toObjects(BakeryInvoice::class.java)
-            .getOrElse(0){ BakeryInvoice() }
+            .getOrElse(0) { BakeryInvoice() }
 
     }
 
