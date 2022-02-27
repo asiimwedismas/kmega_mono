@@ -1,5 +1,6 @@
 package me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.production.components
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.NavigateBefore
@@ -8,6 +9,8 @@ import androidx.compose.material.icons.filled.SkipPrevious
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import me.asiimwedismas.kmega_mono.ui.theme.TypographyM2
 import java.util.*
 
 @Composable
@@ -22,7 +25,12 @@ fun AppBar(
 ) {
     SmallTopAppBar(
         scrollBehavior = scrollBehavior,
-        title = { Text(title) },
+
+        title = {
+            Text(
+                text = title
+            )
+        },
         actions = {
             IconButton(onClick = {
                 onPreviousDateClick()

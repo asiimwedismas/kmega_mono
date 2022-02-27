@@ -7,9 +7,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 
 @Composable
-fun AddItemFAB() {
+fun AddItemFAB(
+    onClick: () -> Unit,
+) {
     FloatingActionButton(
-        onClick = { /*add produce item*/ }
+        onClick = onClick
     ) {
         Icon(imageVector = Icons.Filled.Add, contentDescription = "Add item")
     }

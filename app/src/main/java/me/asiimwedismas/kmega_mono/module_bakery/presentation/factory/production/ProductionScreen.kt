@@ -1,36 +1,39 @@
 package me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.production
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
+import android.util.Log
 import androidx.compose.animation.rememberSplineBasedDecay
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ListItem
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.twotone.Delete
 import androidx.compose.material3.*
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import me.asiimwedismas.kmega_mono.ui.common_components.DateRangePickerDialog
+import me.asiimwedismas.kmega_mono.module_bakery.domain.model.BakeryProduct
 import me.asiimwedismas.kmega_mono.module_bakery.domain.model.FactoryProductionItem
-import me.asiimwedismas.kmega_mono.module_bakery.domain.model.InvoiceType
+import me.asiimwedismas.kmega_mono.module_bakery.presentation.common_components.AddProductForm
+import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.production.components.AddItemFAB
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.production.components.AppBar
 import me.asiimwedismas.kmega_mono.ui.common_components.DatePickerDialog
+import me.asiimwedismas.kmega_mono.ui.common_components.formatAmount
+import me.asiimwedismas.kmega_mono.ui.theme.TypographyM2
+import java.text.NumberFormat
+import java.util.*
 
 
+@OptIn(ExperimentalComposeUiApi::class)
 @ExperimentalMaterial3Api
 @Preview
 @Composable
@@ -47,21 +50,45 @@ fun ProductionScreen(
     val itemsList by viewModel.itemsList
     val totalProductionAmount by viewModel.totalFactoryProduction
 
+    val productQuery = viewModel.addProductFormState.query
+    val predictionsList =  viewModel.addProductFormState.predictions
+    val products by viewModel.productList.observeAsState()
+    LaunchedEffect(key1 = products){
+        if (products != null) {
+            viewModel.addProductFormState.optionsList = products as List<BakeryProduct>
+        }
+    }
+
+    val productQty = viewModel.addProductFormState.qtyInput
+    val submit = viewModel.addProductFormState.submit
+    val showAddFab by viewModel.showAddFab
+    val showAddItemInput by viewModel.showAddItemInput
+
+    Log.e("ProductionScreen: ", products.toString())
+
+
     Scaffold(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection)
             .fillMaxSize(),
         topBar = {
             AppBar(
-                title = "Production: $selectedDate",
+                title = selectedDate,
                 onNavigationIconClick = {},
                 onPreviousDateClick = viewModel::selectPreviousDate,
                 onSelectDateClick = viewModel::toggleShowCalendar,
                 onNextDateClick = viewModel::selectNextDate,
                 scrollBehavior = scrollBehavior
             )
+        },
+        floatingActionButton = {
+            if (showAddFab) {
+                AddItemFAB(
+                    viewModel::onAddFabClick
+                )
+            }
         }
-    ) { innerPadding ->
+    ) {
         if (showCalendar) {
             DatePickerDialog(
                 currentSelected = viewModel.dates.instance.value!!.timeInMillis,
@@ -69,88 +96,85 @@ fun ProductionScreen(
                 onDismiss = viewModel::toggleShowCalendar
             )
         }
-        Text(text = totalProductionAmount.toString())
-        ProductionContent(itemsList = listOf())
+
+        Column {
+            if (showAddItemInput) {
+                AddProductForm(
+                    label = "Select product",
+                    query = productQuery,
+                    onQueryChanged = viewModel::onQueryChanged,
+                    predictionsList = predictionsList,
+                    onOptionSelected = viewModel.addProductFormState::onProductSelected,
+                    onImeAction = viewModel.addProductFormState::clearPredictions,
+                    onClearClick = viewModel.addProductFormState::clearAutoCompleteField,
+                    productQty = productQty,
+                    onQtyChanged = viewModel.addProductFormState::onChangeQty,
+                    submit = submit,
+                    onAddItem = viewModel::onAddItem
+                )
+            }
+            Box(Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.align(Alignment.Center)) {
+                    Text(
+                        text = "Production",
+                        style = TypographyM2.body1,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                    Text(
+                        text = formatAmount(totalProductionAmount),
+                        style = TypographyM2.h2,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                }
+
+            }
+            ProductionContent(
+                itemsList = itemsList,
+                onSwiped = viewModel::deleteItem
+            )
+        }
     }
 }
 
 
-
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ProductionContent(
     itemsList: List<FactoryProductionItem>,
+    onSwiped: (FactoryProductionItem, Int) -> Unit,
 ) {
-
-    val invoiceType = remember {
-        mutableStateOf(InvoiceType.DISPATACH)
-    }
-
-
-
+    val numberFormat = NumberFormat.getNumberInstance(Locale.UK)
     LazyColumn {
-
         itemsIndexed(
             items = itemsList,
             key = { index, item ->
-                "$index+${item.product_name}"
+                "$index+${item.hashCode()}"
             }
         ) { position, item ->
-            val dismissState = rememberDismissState(
-                confirmStateChange = {
-                    if (it == DismissValue.DismissedToEnd || it == DismissValue.DismissedToStart) {
-//                        deleteIndex = position
-//                        openDialog = true
-                    }
-                    true
-                }
-            )
-
-            SwipeToDismiss(
-                state = dismissState,
-                background = {
-                    val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
-                    val color by animateColorAsState(
-                        targetValue = when (dismissState.targetValue) {
-                            DismissValue.Default -> Color.LightGray
-                            else -> Color.Red
-                        }
-                    )
-
-                    val scale by animateFloatAsState(
-                        targetValue = if (dismissState.targetValue == DismissValue.Default) 0.8f else 1.2f
-                    )
-
-                    val alignment = when (direction) {
-                        DismissDirection.StartToEnd -> Alignment.CenterStart
-                        DismissDirection.EndToStart -> Alignment.CenterEnd
-                    }
-
-                    Box(modifier = Modifier
-                        .fillMaxSize()
-                        .background(color = color)
-                        .padding(start = 12.dp, end = 12.dp),
-                        contentAlignment = alignment
+            ListItem(
+                icon = {
+                    IconButton(
+                        onClick = { onSwiped(item, position) }
                     ) {
-                        Icon(imageVector = Icons.Filled.Delete,
-                            contentDescription = "Delete",
-                            modifier = Modifier.scale(scale))
+                        Icon(imageVector = Icons.TwoTone.Delete,
+                            contentDescription = "delete item")
                     }
                 },
-                dismissContent = {
-                    Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        elevation = animateDpAsState(targetValue = if (dismissState.dismissDirection != null) 4.dp else 0.dp).value,
-                        content = {
-//                            InvoiceItemHolder(item = item,
-//                                invoiceType = invoiceType.value)
-                        }
+                text = {
+                    Text(
+                        text = "${item.product_name} (${item.produced_qty})",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                },
+                trailing = {
+                    Text(
+                        text = numberFormat.format(item.wholesale_sales),
+                        style = MaterialTheme.typography.bodyMedium
                     )
                 }
             )
         }
     }
-
 }
 
 
