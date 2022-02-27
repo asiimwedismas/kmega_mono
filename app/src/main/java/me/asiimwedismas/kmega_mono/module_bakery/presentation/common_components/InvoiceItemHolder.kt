@@ -30,10 +30,9 @@ fun InvoiceItemHolder(
         trailing = {
             Text(
                 text = when(invoiceType){
-                    InvoiceType.DISPATACH -> numberFormat.format(item.total_factory_sale)
+                    InvoiceType.DISPATCH -> numberFormat.format(item.total_factory_sale)
                     InvoiceType.OUTLET_DELIVERY -> numberFormat.format(item.total_outlet_sale)
                     InvoiceType.AGENT_DELIVERY -> numberFormat.format(item.total_agent_sale)
-                    InvoiceType.PRODUCTION -> numberFormat.format(item.total_factory_sale)
                     InvoiceType.RETURNS -> numberFormat.format(item.total_factory_sale)
                     InvoiceType.AUDIT -> numberFormat.format(item.total_factory_sale)
                     InvoiceType.EXPIRED -> numberFormat.format(item.total_factory_sale)
