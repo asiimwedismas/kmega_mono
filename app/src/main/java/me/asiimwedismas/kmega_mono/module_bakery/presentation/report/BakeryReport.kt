@@ -16,19 +16,23 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import me.asiimwedismas.kmega_mono.module_bakery.domain.model.FactoryReportCard
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import me.asiimwedismas.kmega_mono.module_bakery.domain.model.DispatchesReportCard
+import me.asiimwedismas.kmega_mono.module_bakery.domain.model.FactoryReportCard
+import me.asiimwedismas.kmega_mono.module_bakery.domain.model.OutletReportCard
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.production.components.AppBar
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.BakeryReportScreen.*
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.components.BakeryReportTabRow
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.dispatches.DispatchesBody
-import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.outlets.OutletsBody
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.factory.FactoryBody
+import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.outlets.OutletsBody
 import me.asiimwedismas.kmega_mono.ui.common_components.DatePickerDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BakeryReport(
+    onNavigationIconClick: () -> Unit,
     viewModel: BakeryReportViewModel = hiltViewModel(),
 ) {
     val allScreens = values().toList()
@@ -37,6 +41,7 @@ fun BakeryReport(
     val currentScreen = BakeryReportScreen.fromRoute(backStackEntry.value?.destination?.route)
     val selectedDate by viewModel.sd.selectedDate.observeAsState()
     val showCalendar by viewModel.showCalendar
+    val isMakingReport by viewModel.makingReport
     val decayAnimationSpec = rememberSplineBasedDecay<Float>()
     val scrollBehavior = remember(decayAnimationSpec) {
         TopAppBarDefaults.pinnedScrollBehavior { false }
@@ -44,12 +49,13 @@ fun BakeryReport(
 
     val factoryReportCard by viewModel.factoryReportCard
     val salesmenReport by viewModel.dispatchesReportCard
+    val outletsReport by viewModel.outletsReportCard
 
     Scaffold(
         topBar = {
             AppBar(
                 title = "$selectedDate",
-                onNavigationIconClick = {},
+                onNavigationIconClick = onNavigationIconClick,
                 onPreviousDateClick = viewModel::selectPreviousDate,
                 onSelectDateClick = viewModel::toggleShowCalendar,
                 onNextDateClick = viewModel::selectNextDate,
@@ -71,12 +77,20 @@ fun BakeryReport(
                 onDismiss = viewModel::toggleShowCalendar
             )
         }
-        BakeryReportNavHost(
-            navController,
-            modifier = Modifier.padding(innerPadding),
-            factoryReportCard = factoryReportCard,
-            dispatchesReport = salesmenReport
-        )
+
+        val swipeRefreshState = rememberSwipeRefreshState(isMakingReport)
+        SwipeRefresh(
+            state = swipeRefreshState,
+            onRefresh = viewModel::makeReport
+        ) {
+            BakeryReportNavHost(
+                navController,
+                modifier = Modifier.padding(innerPadding),
+                factoryReportCard = factoryReportCard,
+                dispatchesReport = salesmenReport,
+                outletsReport = outletsReport
+            )
+        }
     }
 }
 
@@ -86,6 +100,7 @@ fun BakeryReportNavHost(
     modifier: Modifier,
     factoryReportCard: FactoryReportCard,
     dispatchesReport: DispatchesReportCard,
+    outletsReport: OutletReportCard
 ) {
     NavHost(
         navController = navController,
@@ -99,7 +114,7 @@ fun BakeryReportNavHost(
             DispatchesBody(dispatchesReport)
         }
         composable(Outlets.name) {
-            OutletsBody()
+            OutletsBody(outletsReport)
         }
         composable(Moneys.name) {
 

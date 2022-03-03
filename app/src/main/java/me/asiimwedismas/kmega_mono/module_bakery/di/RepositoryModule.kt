@@ -29,48 +29,61 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideIngredientRepository(
-        db: BakeryDatabase
+        db: BakeryDatabase,
     ): IngredientRepository = IngredientRepositoryImp(db.ingredientDao())
 
     @Provides
     @Singleton
     fun provideProductionRepository(
-        @ProductionCollection  collectionReference: CollectionReference
+        @ProductionCollection collectionReference: CollectionReference,
     ): ProductionRepository = ProductionRepositoryImp(collectionReference)
 
     @Provides
     @Singleton
     fun provideDispatchRepository(
-        @DispatchedCollection  collectionReference: CollectionReference
+        @DispatchedCollection collectionReference: CollectionReference,
     ): DispatchesRepository = DispatchesRepositoryImp(collectionReference)
 
     @Provides
     @Singleton
     fun provideAgentRepository(
-        @AuditCollection collectionReference: CollectionReference
+        @AgentDeliveryCollection collectionReference: CollectionReference,
     ): AgentRepository = AgentRepositoryImp(collectionReference)
 
     @Provides
     @Singleton
     fun provideOutletRepository(
-        @OutletDeliveryCollection collectionReference: CollectionReference
+        @OutletDeliveryCollection collectionReference: CollectionReference,
     ): OutletRepository = OutletRepositoryImp(collectionReference)
 
     @Provides
     @Singleton
     fun provideAuditRepository(
-        @AuditCollection collectionReference: CollectionReference
+        @AuditCollection collectionReference: CollectionReference,
     ): AuditRepository = AuditRepositoryImp(collectionReference)
 
     @Provides
     @Singleton
     fun provideExpiredRepository(
-        @ExpiredCollection collectionReference: CollectionReference
+        @ExpiredCollection collectionReference: CollectionReference,
     ): ExpiredRepository = ExpiredRepositoryImp(collectionReference)
 
     @Provides
     @Singleton
     fun provideReturnRepository(
-        @ReturnsCollection collectionReference: CollectionReference
+        @ReturnsCollection collectionReference: CollectionReference,
     ): ReturnRepository = ReturnRepositoryImp(collectionReference)
+
+    @Provides
+    @Singleton
+    fun provideFinancesRepository(
+        @SalesmenHandoversCollection salesmenReference: CollectionReference,
+        @OutletHandoversCollection outletReference: CollectionReference,
+        @SalesmenFieldExpendituresCollection fieldExpendituresReference: CollectionReference,
+    ): FinancesRepository =
+        FinancesRepositoryImp(
+            salesmenReference,
+            outletReference,
+            fieldExpendituresReference
+        )
 }

@@ -25,7 +25,16 @@ fun AppBar(
 ) {
     SmallTopAppBar(
         scrollBehavior = scrollBehavior,
-
+        navigationIcon = {
+            IconButton(onClick = {
+                onNavigationIconClick()
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.NavigateBefore,
+                    contentDescription = "home"
+                )
+            }
+        },
         title = {
             Text(
                 text = title

@@ -144,6 +144,6 @@ fun formatAmount(amount: Long): String {
  * Used with lists to create the animated circle.
  */
 fun <E> List<E>.extractProportions(selector: (E) -> Long): List<Float> {
-    val total = this.sumOf { selector(it).toDouble() }
-    return this.map { (selector(it) / total).toFloat() }
+    val total = this.sumOf { abs(selector(it).toDouble()) }
+    return this.map { (abs(selector(it)) / total).toFloat() }
 }

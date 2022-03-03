@@ -10,5 +10,5 @@ object Constants {
     const val RETURNS_COLLECTION = "returns"
     const val EXPIRED_COLLECTION = "expires"
     const val AUDIT_COLLECTION = "audits"
-
+    const val HANDOVERS = "handovers"
 }

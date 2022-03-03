@@ -1,4 +1,4 @@
-package me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.production
+package me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.damages
 
 import android.util.Log
 import androidx.compose.runtime.State
@@ -15,15 +15,15 @@ import me.asiimwedismas.kmega_mono.common.di.CoroutineDispatchersProvider
 import me.asiimwedismas.kmega_mono.common.getNextDate
 import me.asiimwedismas.kmega_mono.common.getPreviousDate
 import me.asiimwedismas.kmega_mono.module_bakery.domain.model.*
-import me.asiimwedismas.kmega_mono.module_bakery.domain.repository.ProductionRepository
+import me.asiimwedismas.kmega_mono.module_bakery.domain.repository.ExpiredRepository
 import me.asiimwedismas.kmega_mono.module_bakery.domain.use_case.product.GetAllProducts
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.common_components.AddProductFormState
 import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductionViewModel @Inject constructor(
-    private val productionRepository: ProductionRepository,
+class DamagesViewModel @Inject constructor(
+    private val expiredRepository: ExpiredRepository,
     private val coroutineDispatchersProvider: CoroutineDispatchersProvider,
     private val allProducts: GetAllProducts,
 ) : ViewModel() {
@@ -33,16 +33,16 @@ class ProductionViewModel @Inject constructor(
     val productList: LiveData<List<BakeryProduct>> = allProducts()
     val addProductFormState = AddProductFormState<BakeryProduct>("Select product", emptyList())
 
-    private var productionSheet: FactoryProductionSheet = FactoryProductionSheet()
+    private var expiredInvoice: BakeryInvoice = BakeryInvoice()
 
     private val _showCalendar = mutableStateOf(false)
     val showCalendar: State<Boolean> = _showCalendar
 
-    private val _itemsList = mutableStateOf<List<FactoryProductionItem>>(listOf())
-    val itemsList: State<List<FactoryProductionItem>> = _itemsList
+    private val _itemsList = mutableStateOf<List<BakeryInvoiceItem>>(listOf())
+    val itemsList: State<List<BakeryInvoiceItem>> = _itemsList
 
-    private val _totalFactoryProduction = mutableStateOf(0L)
-    val totalFactoryProduction: State<Long> = _totalFactoryProduction
+    private val _totalWholeSales = mutableStateOf(0L)
+    val totalFactoryProduction: State<Long> = _totalWholeSales
 
     private val _totalGrossProfit = mutableStateOf<Long>(0L)
     val totalGrossProfit: State<Long> = _totalGrossProfit
@@ -83,13 +83,13 @@ class ProductionViewModel @Inject constructor(
         fetchSheetJob?.cancel()
 
         fetchSheetJob = viewModelScope.launch {
-            Log.e("FECTH","production: " )
+            Log.e("FECTH","damages: " )
             dates.selectedDate.value?.let { date ->
-                productionSheet = productionRepository.getProductionSheetForDate(date)
-                if (productionSheet == FactoryProductionSheet()) {
+                expiredInvoice = expiredRepository.getExpiredForFactoryForDate(date)
+                if (expiredInvoice == BakeryInvoice()) {
                     initialiseEmptySheet()
                 }
-                _showAddFab.value = !productionSheet.lock_status
+                _showAddFab.value = !expiredInvoice.isLocked
                 _showAddItemInput.value = !_showAddFab.value
                 mutateStates()
             }
@@ -98,42 +98,44 @@ class ProductionViewModel @Inject constructor(
 
     private fun saveProductionSheet() {
         viewModelScope.launch {
-            productionRepository.saveProductionSheet(productionSheet)
+            expiredRepository.saveExpired(expiredInvoice)
             mutateStates()
         }
     }
 
     fun deleteProductionSheet() {
         viewModelScope.launch {
-            productionRepository.delete(productionSheet.document_id)
-            productionSheet = FactoryProductionSheet()
+            expiredRepository.delete(expiredInvoice.document_id)
+            expiredInvoice = BakeryInvoice()
             initialiseEmptySheet()
             mutateStates()
         }
     }
 
-    fun deleteItem(item: FactoryProductionItem, index: Int) {
-        if (productionSheet.items[index] == item) {
-            productionSheet.items.removeAt(index)
+    fun deleteItem(item: BakeryInvoiceItem, index: Int) {
+        if (expiredInvoice.items[index] == item) {
+            expiredInvoice.items.removeAt(index)
             saveProductionSheet()
         }
     }
 
     private fun initialiseEmptySheet() {
-        with(productionSheet) {
+        with(expiredInvoice) {
             date = dates.selectedDate.value!!
             utc = dates.instance.value!!.timeInMillis
-            document_id = date
             document_author_id = ""
             document_author_name = ""
+            outlet_id = "FACTORY"
+            outlet_name = "FACTORY"
+            type = InvoiceType.EXPIRED.name
         }
     }
 
     private fun mutateStates() {
-        _itemsList.value = productionSheet.items
-        _totalFactoryProduction.value = productionSheet.totalWholeSales.toLong()
-        _totalGrossProfit.value = productionSheet.totalGrossProfit.toLong()
-        _totalNetProfit.value = productionSheet.totalNetProfit.toLong()
+        _itemsList.value = expiredInvoice.items
+        _totalWholeSales.value = expiredInvoice.totalFactorySale.toLong()
+        _totalGrossProfit.value = expiredInvoice.totalFactoryProfitGross.toLong()
+        _totalNetProfit.value = expiredInvoice.totalFactoryProfitNet.toLong()
     }
 
     fun onAddFabClick() {
@@ -149,8 +151,8 @@ class ProductionViewModel @Inject constructor(
 
     fun onAddItem() {
         with(addProductFormState) {
-            val item = FactoryProductionItem(selectedOption!!, qty)
-            productionSheet.items.add(item)
+            val item = BakeryInvoiceItem(selectedOption!!, qty)
+            expiredInvoice.items.add(item)
             saveProductionSheet()
             clearInputs()
         }

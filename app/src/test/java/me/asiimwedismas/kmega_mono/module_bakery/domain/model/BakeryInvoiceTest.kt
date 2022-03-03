@@ -25,7 +25,7 @@ class BakeryInvoiceTest {
         val bread = BakeryInvoiceItem(bread, 1)
 
         invoice = BakeryInvoice(
-            items_list = mutableListOf(bread, bread)
+            items = mutableListOf(bread, bread)
         )
     }
 

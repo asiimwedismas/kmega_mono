@@ -1,10 +1,7 @@
 package me.asiimwedismas.kmega_mono
 
-import android.app.Application
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.*
@@ -13,12 +10,10 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkManager
 import dagger.hilt.android.AndroidEntryPoint
 import me.asiimwedismas.kmega_mono.module_bakery.jobs.BakeryDBsync
-import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.production.ProductionScreen
+import me.asiimwedismas.kmega_mono.module_bakery.presentation.BakeryDashboard
+import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.Factory
 
 
-import me.asiimwedismas.kmega_mono.module_bakery.presentation.ingredient.IngredientScreen
-import me.asiimwedismas.kmega_mono.module_bakery.presentation.ingredient.IngredientViewModel
-import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.BakeryReport
 import me.asiimwedismas.kmega_mono.ui.theme.Kmega_monoTheme
 
 @ExperimentalMaterial3Api
@@ -32,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             Kmega_monoTheme {
-                ProductionScreen()
+                BakeryDashboard()
             }
         }
     }

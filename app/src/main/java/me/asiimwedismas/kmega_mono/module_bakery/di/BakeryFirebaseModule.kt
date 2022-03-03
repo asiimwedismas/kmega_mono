@@ -78,7 +78,49 @@ object BakeryFirebaseModule {
     fun provideAuditCollection(
         @Named(v2_BAKERY) bakeryDocument: DocumentReference,
     ) = bakeryDocument.collection(AUDIT_COLLECTION)
+
+    @Provides
+    @Singleton
+    @SalesmenHandoversCollection
+    fun provideSalesmenHandoversCollection(
+
+    ) = Firebase.firestore
+        .collection("ACCOUNTING")
+        .document("BAKERY")
+        .collection("HANDOVERS")
+
+    @Provides
+    @Singleton
+    @OutletHandoversCollection
+    fun provideOutletHandoversCollection(
+
+    ) = Firebase.firestore
+        .collection("ACCOUNTING")
+        .document("BAKERY")
+        .collection("OUTLET_STANDINGS")
+
+    @Provides
+    @Singleton
+    @SalesmenFieldExpendituresCollection
+    fun provideSalesmenFieldExpendituresCollection(
+
+    ) = Firebase.firestore
+        .collection("DEPARTMENTS")
+        .document("BAKERY")
+        .collection("FIELD_EXPENDITURES")
 }
+
+@Retention(AnnotationRetention.BINARY)
+@Qualifier
+annotation class SalesmenFieldExpendituresCollection
+
+@Retention(AnnotationRetention.BINARY)
+@Qualifier
+annotation class OutletHandoversCollection
+
+@Retention(AnnotationRetention.BINARY)
+@Qualifier
+annotation class SalesmenHandoversCollection
 
 @Retention(AnnotationRetention.BINARY)
 @Qualifier

@@ -42,32 +42,32 @@ data class BakeryInvoice(
     var agent_id: String? = null,
     var agent_name: String? = null,
     var care_of: String? = null,
-    var items_list: MutableList<BakeryInvoiceItem> = ArrayList(),
+    var items: MutableList<BakeryInvoiceItem> = ArrayList(),
 )
 
 val BakeryInvoice.totalOutletSale
-    get() = items_list.sumOf { it.total_outlet_sale }
+    get() = items.sumOf { it.total_outlet_sale }
 
 val BakeryInvoice.totalOutletProfitGross
-    get() = items_list.sumOf { it.outlet_profit_gross }
+    get() = items.sumOf { it.outlet_profit_gross }
 
 val BakeryInvoice.totalAgentSale
-    get() = items_list.sumOf { it.total_agent_sale }
+    get() = items.sumOf { it.total_agent_sale }
 
 val BakeryInvoice.totalAgentProfitGross
-    get() = items_list.sumOf { it.agent_profit_gross }
+    get() = items.sumOf { it.agent_profit_gross }
 
 val BakeryInvoice.totalFactorySale
-    get() = items_list.sumOf { it.total_factory_sale }
+    get() = items.sumOf { it.total_factory_sale }
 
 val BakeryInvoice.totalFactoryProfitGross
-    get() = items_list.sumOf { it.factory_profit_gross }
+    get() = items.sumOf { it.factory_profit_gross }
 
 val BakeryInvoice.totalFactoryProfitNet
-    get() = items_list.sumOf { it.factory_profit_net }
+    get() = items.sumOf { it.factory_profit_net }
 
 val BakeryInvoice.totalAgentProfitNet
-    get() = items_list.sumOf { it.agent_profit_net }
+    get() = items.sumOf { it.agent_profit_net }
 
 val BakeryInvoice.totalOutletProfitNet
-    get() = items_list.sumOf { it.outlet_profit_net }
+    get() = items.sumOf { it.outlet_profit_net }

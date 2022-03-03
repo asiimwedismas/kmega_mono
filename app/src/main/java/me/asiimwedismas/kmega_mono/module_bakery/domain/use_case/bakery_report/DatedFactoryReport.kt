@@ -20,27 +20,31 @@ class DatedFactoryReport @Inject constructor(
             val preProductionDef =
                 async { productionRepository.getProductionSheetForDate(previous) }
             val preAuditDef = async { auditRepository.getAuditForFactoryForDate(previous) }
+            val preReturnsDef = async { returnRepository.getReturnsForDate(previous) }
+
             val productionDef = async { productionRepository.getProductionSheetForDate(date) }
             val dispatchedDef = async { dispatchesRepository.getDispatchesForDate(date) }
             val returnedDef = async { returnRepository.getReturnsForDate(date) }
-            val factoryExpiredDef = async { expiredRepository.getExpiredForFactoryForDate(date) }
-            val factoryAuditDef = async { auditRepository.getAuditForFactoryForDate(date) }
+            val expiredDef = async { expiredRepository.getExpiredForFactoryForDate(date) }
+            val auditDef = async { auditRepository.getAuditForFactoryForDate(date) }
 
             val preProduction = preProductionDef.await()
             val preAudit = preAuditDef.await()
+            val preReturns = preReturnsDef.await()
             val production = productionDef.await()
             val dispatched = dispatchedDef.await()
             val returned = returnedDef.await()
-            val factoryExpired = factoryExpiredDef.await()
-            val factoryAudit = factoryAuditDef.await()
+            val factoryExpired = expiredDef.await()
+            val factoryAudit = auditDef.await()
 
             return@withContext withContext(dispatchers.default) {
                 FactoryReportCard(
                     preProducedList = listOf(preProduction),
+                    preReturnedList = preReturns,
                     producedList = listOf(production),
                     dispatchedList = dispatched,
                     returnedList = returned,
-                    expiredList = factoryExpired,
+                    expiredList = listOf(factoryExpired),
                     preAuditedList = listOf(preAudit),
                     auditedList = listOf(factoryAudit)
                 )

@@ -11,7 +11,7 @@ interface ExpiredRepository {
 
     suspend fun getExpiredForOutletForDate(outletID: String, date: String): List<BakeryInvoice>
 
-    suspend fun getExpiredForFactoryForDate(date: String): List<BakeryInvoice>
+    suspend fun getExpiredForFactoryForDate(date: String): BakeryInvoice
     suspend fun getExpiredForFieldForDate(date: String): List<BakeryInvoice>
 
     suspend fun getAllExpiredInRange(from: Long, to: Long): List<BakeryInvoice>

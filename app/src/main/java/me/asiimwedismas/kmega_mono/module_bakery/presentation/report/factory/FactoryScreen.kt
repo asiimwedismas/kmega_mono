@@ -17,16 +17,17 @@ import me.asiimwedismas.kmega_mono.module_bakery.domain.model.FactoryReportCard
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.BakeryReportViewModel
 import me.asiimwedismas.kmega_mono.ui.common_components.CategoryRow
 import me.asiimwedismas.kmega_mono.ui.common_components.StatementBody
+import me.asiimwedismas.kmega_mono.ui.theme.*
 
 @Composable
 fun FactoryBody(
     reportCard: FactoryReportCard
 ) {
     val categories = listOf(
-        ReportCategory("Shortage", reportCard.shortage, Color(0xFFFF6951)),
-        ReportCategory("Dispatches", reportCard.dispatched, Color(0xFF004940)),
-        ReportCategory("In-house damages", reportCard.expired, Color(0xFF37EFBA)),
-        ReportCategory("Counted balance", reportCard.audited, Color(0xFFFFD7D0)),
+        ReportCategory("Shortage", reportCard.shortage, ColorsRed200),
+        ReportCategory("Dispatches", reportCard.dispatched, ColorsBlue200),
+        ReportCategory("In-house damages", reportCard.expired, ColorsYellow200),
+        ReportCategory("Counted balance", reportCard.audited, ColorsGreen200),
     )
 
     StatementBody(

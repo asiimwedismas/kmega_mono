@@ -1,4 +1,4 @@
-package me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.production
+package me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.damages
 
 import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.layout.*
@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import me.asiimwedismas.kmega_mono.module_bakery.domain.model.BakeryInvoiceItem
 import me.asiimwedismas.kmega_mono.module_bakery.domain.model.BakeryProduct
 import me.asiimwedismas.kmega_mono.module_bakery.domain.model.FactoryProductionItem
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.common_components.AddProductForm
@@ -36,8 +37,8 @@ import java.util.*
 @ExperimentalMaterial3Api
 @Preview
 @Composable
-fun ProductionScreen(
-    viewModel: ProductionViewModel = hiltViewModel(),
+fun DamagesScreen(
+    viewModel: DamagesViewModel = hiltViewModel(),
 ) {
     val decayAnimationSpec = rememberSplineBasedDecay<Float>()
     val scrollBehavior = remember(decayAnimationSpec) {
@@ -64,7 +65,6 @@ fun ProductionScreen(
     val submit = viewModel.addProductFormState.submit
     val showAddFab by viewModel.showAddFab
     val showAddItemInput by viewModel.showAddItemInput
-
 
     Scaffold(
         modifier = Modifier
@@ -115,7 +115,7 @@ fun ProductionScreen(
             Box(Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.align(Alignment.Center)) {
                     Text(
-                        text = "Production",
+                        text = "Factory damages",
                         style = TypographyM2.body1,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
@@ -156,7 +156,7 @@ fun ProductionScreen(
                     }
                 }
             }
-            ProductionContent(
+            InvoiceContent(
                 itemsList = itemsList,
                 onSwiped = viewModel::deleteItem
             )
@@ -167,9 +167,9 @@ fun ProductionScreen(
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun ProductionContent(
-    itemsList: List<FactoryProductionItem>,
-    onSwiped: (FactoryProductionItem, Int) -> Unit,
+fun InvoiceContent(
+    itemsList: List<BakeryInvoiceItem>,
+    onSwiped: (BakeryInvoiceItem, Int) -> Unit,
 ) {
     val numberFormat = NumberFormat.getNumberInstance(Locale.UK)
     LazyColumn {
@@ -190,13 +190,13 @@ fun ProductionContent(
                 },
                 text = {
                     Text(
-                        text = "${item.product_name} (${item.produced_qty})",
+                        text = "${item.product_name} (${item.qty})",
                         style = MaterialTheme.typography.bodyMedium
                     )
                 },
                 trailing = {
                     Text(
-                        text = numberFormat.format(item.wholesale_sales),
+                        text = numberFormat.format(item.total_factory_sale),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }

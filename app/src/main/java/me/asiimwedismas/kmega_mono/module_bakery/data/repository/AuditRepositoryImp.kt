@@ -37,6 +37,6 @@ class AuditRepositoryImp(
             .get()
             .await()
             .toObjects(BakeryInvoice::class.java)
-            .getOrElse(0) { BakeryInvoice() }
+            .firstOrNull() ?: BakeryInvoice()
     }
 }
