@@ -1,5 +1,7 @@
 package me.asiimwedismas.kmega_mono.module_bakery.domain.model
 
+import kotlin.math.abs
+
 class OutletReportCard(
     var outletsDaySheet: OutletsDaySheet,
 ) {
@@ -31,14 +33,14 @@ class OutletReportCard(
         calculatedMissingMoneys()
     }
 
-    fun calculate(deliveries: Long) {
+    fun updateOutletDeliveries(deliveries: Long) {
         openingStock = outletsDaySheet.outletStandingList.sumOf { it.brought_forward } + deliveries
         calculatedMissingMoneys()
     }
 
     private fun calculatedMissingMoneys() {
-        val accountedFor = handovers + expenditure + expired + auditedShortage
-        unaccountedFor = (openingStock - accountedFor) - closingStock
+        val accountedFor = handovers + expenditure + expired + abs(auditedShortage) + closingStock
+        unaccountedFor = accountedFor - openingStock
     }
 
     companion object {

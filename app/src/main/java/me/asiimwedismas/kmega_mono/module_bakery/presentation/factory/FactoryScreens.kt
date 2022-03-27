@@ -1,6 +1,7 @@
 package me.asiimwedismas.kmega_mono.module_bakery.presentation.factory
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Cake
 import androidx.compose.material.icons.twotone.Calculate
 import androidx.compose.material.icons.twotone.PrecisionManufacturing
 import androidx.compose.material.icons.twotone.Recycling
@@ -11,7 +12,7 @@ enum class FactoryScreens(
     val icon: ImageVector,
 ){
     Production(
-        icon = Icons.TwoTone.PrecisionManufacturing
+        icon = Icons.Rounded.Cake
     ),
     Damages(
         icon = Icons.TwoTone.Recycling

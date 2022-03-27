@@ -5,11 +5,11 @@ import kotlin.math.abs
 class DispatchesReportCard(
     var dispatches: Long = 0,
     var returns: Long = 0,
-    private var outletList: List<BakeryInvoice>,
-    private var agentList: List<BakeryInvoice>,
-    private var expiredList: List<BakeryInvoice>,
-    private var handoversList: List<CashierStanding>,
-    private var expendituresList: List<FieldExpenditure>,
+    var outletList: List<BakeryInvoice>,
+    var agentList: List<BakeryInvoice>,
+    var expiredList: List<BakeryInvoice>,
+    var handoversList: List<CashierStanding>,
+    var expendituresList: List<FieldExpenditure>,
 ) {
     var outletsDeliveries: Long = 0
         private set
@@ -62,7 +62,7 @@ class DispatchesReportCard(
                 abs(salesmenShortages) -
                 debitsPaid
 
-        unaccounted = dispatches - accountedFor
+        unaccounted = accountedFor - dispatches
 
     }
 

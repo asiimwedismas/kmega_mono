@@ -11,6 +11,7 @@ buildscript {
         fragment_version = '1.4.1'
         hilt_version = '1.0.0'
         work_version = '2.7.1'
+        accompanist_version = '0.19.0'
     }
     repositories {
         google()

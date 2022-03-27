@@ -56,6 +56,9 @@ class ProductionViewModel @Inject constructor(
     private val _showAddItemInput = mutableStateOf(false)
     val showAddItemInput: State<Boolean> = _showAddItemInput
 
+    private val _editStatus = mutableStateOf<Boolean>(false)
+    val editStatus: State<Boolean> = _editStatus
+
     var fetchSheetJob: Job? = null
 
     init {
@@ -130,6 +133,7 @@ class ProductionViewModel @Inject constructor(
     }
 
     private fun mutateStates() {
+        _editStatus.value = productionSheet.lock_status
         _itemsList.value = productionSheet.items
         _totalFactoryProduction.value = productionSheet.totalWholeSales.toLong()
         _totalGrossProfit.value = productionSheet.totalGrossProfit.toLong()

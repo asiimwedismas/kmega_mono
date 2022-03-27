@@ -2,10 +2,10 @@ package me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.productio
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.NavigateBefore
-import androidx.compose.material.icons.filled.SkipNext
-import androidx.compose.material.icons.filled.SkipPrevious
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.rounded.Event
+import androidx.compose.material.icons.rounded.SkipNext
+import androidx.compose.material.icons.rounded.SkipPrevious
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -30,7 +30,7 @@ fun AppBar(
                 onNavigationIconClick()
             }) {
                 Icon(
-                    imageVector = Icons.Filled.NavigateBefore,
+                    imageVector = Icons.Filled.ArrowBack,
                     contentDescription = "home"
                 )
             }
@@ -45,7 +45,7 @@ fun AppBar(
                 onPreviousDateClick()
             }) {
                 Icon(
-                    imageVector = Icons.Filled.SkipPrevious,
+                    imageVector = Icons.Rounded.SkipPrevious,
                     contentDescription = "Previous date"
                 )
             }
@@ -53,7 +53,7 @@ fun AppBar(
                 onSelectDateClick()
             }) {
                 Icon(
-                    imageVector = Icons.Filled.DateRange,
+                    imageVector = Icons.Rounded.Event,
                     contentDescription = "Pick date"
                 )
             }
@@ -61,7 +61,60 @@ fun AppBar(
                 onNextDateClick()
             }) {
                 Icon(
-                    imageVector = Icons.Filled.SkipNext,
+                    imageVector = Icons.Rounded.SkipNext,
+                    contentDescription = "Next date"
+                )
+            }
+        }
+    )
+}
+
+@Composable
+fun MeduimAppBar(
+    modifier: Modifier = Modifier,
+    title: @Composable () -> Unit,
+    onNavigationIconClick: () -> Unit,
+    onPreviousDateClick: () -> Unit,
+    onSelectDateClick: () -> Unit,
+    onNextDateClick: () -> Unit,
+    scrollBehavior: TopAppBarScrollBehavior,
+) {
+    MediumTopAppBar(
+        scrollBehavior = scrollBehavior,
+        navigationIcon = {
+            IconButton(
+                onClick = {
+                onNavigationIconClick()
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "home"
+                )
+            }
+        },
+        title = title,
+        actions = {
+            IconButton(onClick = {
+                onPreviousDateClick()
+            }) {
+                Icon(
+                    imageVector = Icons.Rounded.SkipPrevious,
+                    contentDescription = "Previous date"
+                )
+            }
+            IconButton(onClick = {
+                onSelectDateClick()
+            }) {
+                Icon(
+                    imageVector = Icons.Rounded.Event,
+                    contentDescription = "Pick date"
+                )
+            }
+            IconButton(onClick = {
+                onNextDateClick()
+            }) {
+                Icon(
+                    imageVector = Icons.Rounded.SkipNext,
                     contentDescription = "Next date"
                 )
             }

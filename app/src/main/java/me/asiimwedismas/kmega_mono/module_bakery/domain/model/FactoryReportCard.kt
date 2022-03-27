@@ -1,5 +1,7 @@
 package me.asiimwedismas.kmega_mono.module_bakery.domain.model
 
+import kotlin.math.abs
+
 data class FactoryReportCard(
     val preProducedList: List<FactoryProductionSheet>,
     val preAuditedList: List<BakeryInvoice>,
@@ -47,7 +49,8 @@ data class FactoryReportCard(
         openingStock = preAudited + preProducted + preReturned
         closingStock = audited + produced + returned
 
-        shortage = audited - (openingStock - dispatched - expired)
+        val accountedFor = audited + dispatched + expired
+        shortage = accountedFor - openingStock
     }
 
     companion object {

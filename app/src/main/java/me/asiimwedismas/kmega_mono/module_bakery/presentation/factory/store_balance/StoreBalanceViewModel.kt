@@ -56,6 +56,9 @@ class StoreBalanceViewModel @Inject constructor(
     private val _showAddItemInput = mutableStateOf(false)
     val showAddItemInput: State<Boolean> = _showAddItemInput
 
+    private val _editStatus = mutableStateOf<Boolean>(false)
+    val editStatus: State<Boolean> = _editStatus
+
     var fetchSheetJob: Job? = null
 
     init {
@@ -132,6 +135,7 @@ class StoreBalanceViewModel @Inject constructor(
     }
 
     private fun mutateStates() {
+        _editStatus.value = storeBalanceInvoice.isLocked
         _itemsList.value = storeBalanceInvoice.items
         _totalWholeSales.value = storeBalanceInvoice.totalFactorySale.toLong()
         _totalGrossProfit.value = storeBalanceInvoice.totalFactoryProfitGross.toLong()

@@ -23,8 +23,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import me.asiimwedismas.kmega_mono.module_bakery.domain.model.BakeryProduct
 import me.asiimwedismas.kmega_mono.module_bakery.domain.model.FactoryProductionItem
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.common_components.AddProductForm
+import me.asiimwedismas.kmega_mono.module_bakery.presentation.common_components.InvoiceProductHolder
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.production.components.AddItemFAB
-import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.production.components.AppBar
 import me.asiimwedismas.kmega_mono.ui.common_components.DatePickerDialog
 import me.asiimwedismas.kmega_mono.ui.common_components.formatAmount
 import me.asiimwedismas.kmega_mono.ui.theme.TypographyM2
@@ -52,9 +52,9 @@ fun ProductionScreen(
     val totalNetProfit by viewModel.totalNetProfit
 
     val productQuery = viewModel.addProductFormState.query
-    val predictionsList =  viewModel.addProductFormState.predictions
+    val predictionsList = viewModel.addProductFormState.predictions
     val products by viewModel.productList.observeAsState()
-    LaunchedEffect(key1 = products){
+    LaunchedEffect(key1 = products) {
         if (products != null) {
             viewModel.addProductFormState.optionsList = products as List<BakeryProduct>
         }
@@ -64,22 +64,13 @@ fun ProductionScreen(
     val submit = viewModel.addProductFormState.submit
     val showAddFab by viewModel.showAddFab
     val showAddItemInput by viewModel.showAddItemInput
+    val editStatus by viewModel.editStatus
 
 
     Scaffold(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection)
             .fillMaxSize(),
-//        topBar = {
-//            AppBar(
-//                title = selectedDate,
-//                onNavigationIconClick = {},
-//                onPreviousDateClick = viewModel::selectPreviousDate,
-//                onSelectDateClick = viewModel::toggleShowCalendar,
-//                onNextDateClick = viewModel::selectNextDate,
-//                scrollBehavior = scrollBehavior
-//            )
-//        },
         floatingActionButton = {
             if (showAddFab) {
                 AddItemFAB(
@@ -158,7 +149,8 @@ fun ProductionScreen(
             }
             ProductionContent(
                 itemsList = itemsList,
-                onSwiped = viewModel::deleteItem
+                onSwiped = viewModel::deleteItem,
+                editable = editStatus
             )
         }
     }
@@ -170,6 +162,7 @@ fun ProductionScreen(
 fun ProductionContent(
     itemsList: List<FactoryProductionItem>,
     onSwiped: (FactoryProductionItem, Int) -> Unit,
+    editable: Boolean,
 ) {
     val numberFormat = NumberFormat.getNumberInstance(Locale.UK)
     LazyColumn {
@@ -179,30 +172,20 @@ fun ProductionContent(
                 "$index+${item.hashCode()}"
             }
         ) { position, item ->
-            ListItem(
-                icon = {
-                    IconButton(
-                        onClick = { onSwiped(item, position) }
-                    ) {
-                        Icon(imageVector = Icons.TwoTone.Delete,
-                            contentDescription = "delete item")
-                    }
-                },
-                text = {
-                    Text(
-                        text = "${item.product_name} (${item.produced_qty})",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                },
-                trailing = {
-                    Text(
-                        text = numberFormat.format(item.wholesale_sales),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
+            InvoiceProductHolder(
+                onDeleted = onSwiped,
+                deletable = editable,
+                item = item,
+                product = item.product_name,
+                qty = item.produced_qty,
+                position = position,
+                amount = item.wholesale_sales,
+                numberFormat = numberFormat
             )
         }
     }
 }
+
+
 
 

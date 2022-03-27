@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="me.asiimwedismas.kmega_mono">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".KmegaApp"
         android:icon="@mipmap/ic_launcher"

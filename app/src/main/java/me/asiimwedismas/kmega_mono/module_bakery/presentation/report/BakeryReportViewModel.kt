@@ -86,13 +86,18 @@ class BakeryReportViewModel @Inject constructor(
                 val dispatchesReport = dispatchesDef.await()
                 val outletReport = outletsDef.await()
 
+                var outletDeliveries = 0L
                 with(dispatchesReport) {
                     dispatches = factReport.dispatched
                     returns = factReport.returned
                     calulate()
+
+                    outletDeliveries = outletList.sumOf { invoice ->
+                        invoice.items.sumOf { it.total_outlet_sale }
+                    }.toLong()
                 }
 
-                outletReport.calculate(dispatchesReport.outletsDeliveries)
+                outletReport.updateOutletDeliveries(outletDeliveries)
 
                 _factoryReportCard.value = factReport
                 _dispatchesReportCard.value = dispatchesReport
