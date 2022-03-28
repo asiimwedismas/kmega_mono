@@ -18,12 +18,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import me.asiimwedismas.kmega_mono.module_bakery.domain.model.DispatchedBreakDown
 import me.asiimwedismas.kmega_mono.module_bakery.domain.model.DispatchesReportCard
 import me.asiimwedismas.kmega_mono.module_bakery.domain.model.FactoryReportCard
 import me.asiimwedismas.kmega_mono.module_bakery.domain.model.OutletReportCard
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.production.components.AppBar
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.BakeryReportScreen.*
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.components.BakeryReportTabRow
+import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.dispatches.DispatchedBreakDownScreen
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.dispatches.DispatchesBody
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.factory.FactoryBody
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.outlets.OutletsBody
@@ -50,6 +52,7 @@ fun BakeryReport(
     val factoryReportCard by viewModel.factoryReportCard
     val salesmenReport by viewModel.dispatchesReportCard
     val outletsReport by viewModel.outletsReportCard
+    val unaccountedForDispatches by viewModel.dispatchedBreakDownReportCard
 
     Scaffold(
         topBar = {
@@ -88,7 +91,8 @@ fun BakeryReport(
                 modifier = Modifier.padding(innerPadding),
                 factoryReportCard = factoryReportCard,
                 dispatchesReport = salesmenReport,
-                outletsReport = outletsReport
+                outletsReport = outletsReport,
+                dispatchedBreakDownReport = unaccountedForDispatches
             )
         }
     }
@@ -100,13 +104,17 @@ fun BakeryReportNavHost(
     modifier: Modifier,
     factoryReportCard: FactoryReportCard,
     dispatchesReport: DispatchesReportCard,
-    outletsReport: OutletReportCard
+    outletsReport: OutletReportCard,
+    dispatchedBreakDownReport: DispatchedBreakDown,
 ) {
     NavHost(
         navController = navController,
-        startDestination = Factory.name,
+        startDestination = Breakdown.name,
         modifier = modifier
     ) {
+        composable(Breakdown.name) {
+            DispatchedBreakDownScreen(dispatchedBreakDownReport)
+        }
         composable(Factory.name) {
             FactoryBody(factoryReportCard)
         }
@@ -115,9 +123,6 @@ fun BakeryReportNavHost(
         }
         composable(Outlets.name) {
             OutletsBody(outletsReport)
-        }
-        composable(Moneys.name) {
-
         }
     }
 }

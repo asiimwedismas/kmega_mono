@@ -1,7 +1,5 @@
 package me.asiimwedismas.kmega_mono.module_bakery.domain.model
 
-import kotlin.math.abs
-
 data class FactoryReportCard(
     val preProducedList: List<FactoryProductionSheet>,
     val preAuditedList: List<BakeryInvoice>,
@@ -28,12 +26,15 @@ data class FactoryReportCard(
         private set
     var audited: Long = 0
         private set
-    var shortage: Long = 0
+    var unaccountedFor: Long = 0
         private set
     var openingStock: Long = 0
         private set
     var closingStock: Long = 0
         private set
+
+    lateinit var dispatchedBreakDown: DispatchedBreakDown
+    private set
 
     init {
         preProducted = preProducedList.sumOf { it.totalWholeSales }.toLong()
@@ -50,7 +51,9 @@ data class FactoryReportCard(
         closingStock = audited + produced + returned
 
         val accountedFor = audited + dispatched + expired
-        shortage = accountedFor - openingStock
+        unaccountedFor = accountedFor - openingStock
+
+        dispatchedBreakDown = DispatchedBreakDown(this)
     }
 
     companion object {

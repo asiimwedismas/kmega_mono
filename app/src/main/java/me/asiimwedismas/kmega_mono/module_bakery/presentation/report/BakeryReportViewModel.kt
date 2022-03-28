@@ -13,6 +13,7 @@ import me.asiimwedismas.kmega_mono.common.SearchDates
 import me.asiimwedismas.kmega_mono.common.di.CoroutineDispatchersProvider
 import me.asiimwedismas.kmega_mono.common.getNextDate
 import me.asiimwedismas.kmega_mono.common.getPreviousDate
+import me.asiimwedismas.kmega_mono.module_bakery.domain.model.DispatchedBreakDown
 import me.asiimwedismas.kmega_mono.module_bakery.domain.model.DispatchesReportCard
 import me.asiimwedismas.kmega_mono.module_bakery.domain.model.FactoryReportCard
 import me.asiimwedismas.kmega_mono.module_bakery.domain.model.OutletReportCard
@@ -42,6 +43,11 @@ class BakeryReportViewModel @Inject constructor(
     private val _outletsReportCard =
         mutableStateOf<OutletReportCard>(OutletReportCard.createEmpty())
     val outletsReportCard: State<OutletReportCard> = _outletsReportCard
+
+    private val _dispatchedBreakdownReportCard = mutableStateOf(DispatchedBreakDown(
+        FactoryReportCard.emptyCard()))
+    val dispatchedBreakDownReportCard: State<DispatchedBreakDown> =
+        _dispatchedBreakdownReportCard
 
     private val _showCalendar = mutableStateOf(false)
     val showCalendar: State<Boolean> = _showCalendar
@@ -102,6 +108,7 @@ class BakeryReportViewModel @Inject constructor(
                 _factoryReportCard.value = factReport
                 _dispatchesReportCard.value = dispatchesReport
                 _outletsReportCard.value = outletReport
+                _dispatchedBreakdownReportCard.value = factReport.dispatchedBreakDown
             }
             _makingReport.value = false
         }

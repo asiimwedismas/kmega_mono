@@ -7,6 +7,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 enum class BakeryReportScreen(
     val icon: ImageVector,
 ) {
+    Breakdown(
+        icon = Icons.TwoTone.Functions
+    ),
     Factory(
         icon = Icons.TwoTone.PrecisionManufacturing
     ),
@@ -15,9 +18,6 @@ enum class BakeryReportScreen(
     ),
     Outlets(
         icon = Icons.TwoTone.Store
-    ),
-    Moneys(
-        icon = Icons.TwoTone.AttachMoney
     );
 
     companion object {
@@ -26,7 +26,7 @@ enum class BakeryReportScreen(
                 Factory.name, null -> Factory
                 Dispatches.name -> Dispatches
                 Outlets.name -> Outlets
-                Moneys.name -> Moneys
+                Breakdown.name -> Breakdown
                 else -> throw IllegalArgumentException("Route $route doesn't exist")
             }
         }
