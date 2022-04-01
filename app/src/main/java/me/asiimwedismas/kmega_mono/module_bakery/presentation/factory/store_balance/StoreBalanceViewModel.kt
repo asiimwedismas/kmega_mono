@@ -29,14 +29,11 @@ class StoreBalanceViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    val dates: SearchDates = SearchDates()
+    private val dates: SearchDates = SearchDates()
     val productList: LiveData<List<BakeryProduct>> = allProducts()
     val addProductFormState = AddProductFormState<BakeryProduct>("Select product", emptyList())
 
     private var storeBalanceInvoice: BakeryInvoice = BakeryInvoice()
-
-    private val _showCalendar = mutableStateOf(false)
-    val showCalendar: State<Boolean> = _showCalendar
 
     private val _itemsList = mutableStateOf<List<BakeryInvoiceItem>>(listOf())
     val itemsList: State<List<BakeryInvoiceItem>> = _itemsList
@@ -63,18 +60,6 @@ class StoreBalanceViewModel @Inject constructor(
 
     init {
         fetchSheet()
-    }
-
-    fun selectPreviousDate() {
-        changeDate(dates.instance.value!!.getPreviousDate())
-    }
-
-    fun selectNextDate() {
-        changeDate(dates.instance.value!!.getNextDate())
-    }
-
-    fun toggleShowCalendar() {
-        _showCalendar.value = !_showCalendar.value
     }
 
     fun changeDate(calendar: Calendar) {
@@ -135,7 +120,7 @@ class StoreBalanceViewModel @Inject constructor(
     }
 
     private fun mutateStates() {
-        _editStatus.value = storeBalanceInvoice.isLocked
+        _editStatus.value = !storeBalanceInvoice.isLocked
         _itemsList.value = storeBalanceInvoice.items
         _totalWholeSales.value = storeBalanceInvoice.totalFactorySale.toLong()
         _totalGrossProfit.value = storeBalanceInvoice.totalFactoryProfitGross.toLong()
@@ -155,7 +140,7 @@ class StoreBalanceViewModel @Inject constructor(
 
     fun onAddItem() {
         with(addProductFormState) {
-            val item = BakeryInvoiceItem(selectedOption!!, qty)
+            val item = BakeryInvoiceItem(selectedOption!!, qty.toInt())
             storeBalanceInvoice.items.add(item)
             saveProductionSheet()
             clearInputs()

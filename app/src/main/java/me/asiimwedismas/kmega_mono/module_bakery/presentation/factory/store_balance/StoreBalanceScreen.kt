@@ -36,13 +36,6 @@ import java.util.*
 fun StoreBalanceScreen(
     viewModel: StoreBalanceViewModel = hiltViewModel(),
 ) {
-    val decayAnimationSpec = rememberSplineBasedDecay<Float>()
-    val scrollBehavior = remember(decayAnimationSpec) {
-        TopAppBarDefaults.pinnedScrollBehavior { false }
-    }
-
-    val selectedDate by viewModel.dates.selectedDate.observeAsState("")
-    val showCalendar by viewModel.showCalendar
     val itemsList by viewModel.itemsList
     val totalProductionAmount by viewModel.totalFactoryProduction
     val totalGrossProfit by viewModel.totalGrossProfit
@@ -64,9 +57,7 @@ fun StoreBalanceScreen(
     val editStatus by viewModel.editStatus
 
     Scaffold(
-        modifier = Modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection)
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
             if (showAddFab) {
                 AddItemFAB(
@@ -75,14 +66,6 @@ fun StoreBalanceScreen(
             }
         }
     ) {
-        if (showCalendar) {
-            DatePickerDialog(
-                currentSelected = viewModel.dates.instance.value!!.timeInMillis,
-                onDateSelected = viewModel::changeDate,
-                onDismiss = viewModel::toggleShowCalendar
-            )
-        }
-
         Column {
             if (showAddItemInput) {
                 AddProductForm(

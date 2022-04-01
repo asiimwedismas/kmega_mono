@@ -23,6 +23,7 @@ import me.asiimwedismas.kmega_mono.module_bakery.domain.use_case.product.GetAllP
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.damages.DamagesViewModel
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.production.ProductionViewModel
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.store_balance.StoreBalanceViewModel
+import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.used_ingredients.UsedIngredientsViewModel
 import java.util.*
 import javax.inject.Inject
 
@@ -34,6 +35,7 @@ class FactoryViewModel  @Inject constructor(
     lateinit var productionViewModel: ProductionViewModel
     lateinit var storeBalanceViewModel: StoreBalanceViewModel
     lateinit var damagesViewModel: DamagesViewModel
+    lateinit var usedIngredientsViewModel: UsedIngredientsViewModel
 
     private val _showCalendar = mutableStateOf(false)
     val showCalendar: State<Boolean> = _showCalendar
@@ -55,6 +57,7 @@ class FactoryViewModel  @Inject constructor(
         productionViewModel.changeDate(calendar)
         storeBalanceViewModel.changeDate(calendar)
         damagesViewModel.changeDate(calendar)
+        usedIngredientsViewModel.changeDate(calendar)
     }
 
 }

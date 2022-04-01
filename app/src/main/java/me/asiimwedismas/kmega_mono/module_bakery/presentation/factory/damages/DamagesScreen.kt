@@ -5,9 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ListItem
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.twotone.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,11 +19,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import me.asiimwedismas.kmega_mono.module_bakery.domain.model.BakeryInvoiceItem
 import me.asiimwedismas.kmega_mono.module_bakery.domain.model.BakeryProduct
-import me.asiimwedismas.kmega_mono.module_bakery.domain.model.FactoryProductionItem
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.common_components.AddProductForm
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.common_components.InvoiceProductHolder
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.production.components.AddItemFAB
-import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.production.components.AppBar
 import me.asiimwedismas.kmega_mono.ui.common_components.DatePickerDialog
 import me.asiimwedismas.kmega_mono.ui.common_components.formatAmount
 import me.asiimwedismas.kmega_mono.ui.theme.TypographyM2
@@ -41,22 +36,15 @@ import java.util.*
 fun DamagesScreen(
     viewModel: DamagesViewModel = hiltViewModel(),
 ) {
-    val decayAnimationSpec = rememberSplineBasedDecay<Float>()
-    val scrollBehavior = remember(decayAnimationSpec) {
-        TopAppBarDefaults.pinnedScrollBehavior { false }
-    }
-
-    val selectedDate by viewModel.dates.selectedDate.observeAsState("")
-    val showCalendar by viewModel.showCalendar
     val itemsList by viewModel.itemsList
     val totalProductionAmount by viewModel.totalFactoryProduction
     val totalGrossProfit by viewModel.totalGrossProfit
     val totalNetProfit by viewModel.totalNetProfit
 
     val productQuery = viewModel.addProductFormState.query
-    val predictionsList =  viewModel.addProductFormState.predictions
+    val predictionsList = viewModel.addProductFormState.predictions
     val products by viewModel.productList.observeAsState()
-    LaunchedEffect(key1 = products){
+    LaunchedEffect(key1 = products) {
         if (products != null) {
             viewModel.addProductFormState.optionsList = products as List<BakeryProduct>
         }
@@ -69,19 +57,7 @@ fun DamagesScreen(
     val editStatus by viewModel.editStatus
 
     Scaffold(
-        modifier = Modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection)
-            .fillMaxSize(),
-//        topBar = {
-//            AppBar(
-//                title = selectedDate,
-//                onNavigationIconClick = {},
-//                onPreviousDateClick = viewModel::selectPreviousDate,
-//                onSelectDateClick = viewModel::toggleShowCalendar,
-//                onNextDateClick = viewModel::selectNextDate,
-//                scrollBehavior = scrollBehavior
-//            )
-//        },
+        modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
             if (showAddFab) {
                 AddItemFAB(
@@ -90,14 +66,6 @@ fun DamagesScreen(
             }
         }
     ) {
-        if (showCalendar) {
-            DatePickerDialog(
-                currentSelected = viewModel.dates.instance.value!!.timeInMillis,
-                onDateSelected = viewModel::changeDate,
-                onDismiss = viewModel::toggleShowCalendar
-            )
-        }
-
         Column {
             if (showAddItemInput) {
                 AddProductForm(

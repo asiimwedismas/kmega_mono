@@ -1,4 +1,4 @@
-package me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.production
+package me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.used_ingredients
 
 import android.util.Log
 import androidx.compose.runtime.State
@@ -15,37 +15,31 @@ import me.asiimwedismas.kmega_mono.common.di.CoroutineDispatchersProvider
 import me.asiimwedismas.kmega_mono.common.getNextDate
 import me.asiimwedismas.kmega_mono.common.getPreviousDate
 import me.asiimwedismas.kmega_mono.module_bakery.domain.model.*
-import me.asiimwedismas.kmega_mono.module_bakery.domain.repository.ProductionRepository
-import me.asiimwedismas.kmega_mono.module_bakery.domain.use_case.product.GetAllProducts
+import me.asiimwedismas.kmega_mono.module_bakery.domain.repository.UsedIngredientsRepository
+import me.asiimwedismas.kmega_mono.module_bakery.domain.use_case.ingredient.GetAllIngredients
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.common_components.AddProductFormState
 import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductionViewModel @Inject constructor(
-    private val productionRepository: ProductionRepository,
+class UsedIngredientsViewModel @Inject constructor(
+    private val usedIngredientRepository: UsedIngredientsRepository,
     private val coroutineDispatchersProvider: CoroutineDispatchersProvider,
-    private val allProducts: GetAllProducts,
+    private val allIngredients: GetAllIngredients,
 ) : ViewModel() {
 
-
     private val dates: SearchDates = SearchDates()
-    val productList: LiveData<List<BakeryProduct>> = allProducts()
-    val addProductFormState = AddProductFormState<BakeryProduct>("Select product", emptyList())
+    val ingredientsList: LiveData<List<BakeryIngredient>> = allIngredients()
+    val addIngredientFormState =
+        AddProductFormState<BakeryIngredient>("Select Ingredient", emptyList())
 
-    private var productionSheet: FactoryProductionSheet = FactoryProductionSheet()
+    private var usedIngredientsSheet: UsedIngredientsSheet = UsedIngredientsSheet()
 
-    private val _itemsList = mutableStateOf<List<FactoryProductionItem>>(listOf())
-    val itemsList: State<List<FactoryProductionItem>> = _itemsList
+    private val _itemsList = mutableStateOf<List<UsedIngredientItem>>(listOf())
+    val itemsList: State<List<UsedIngredientItem>> = _itemsList
 
-    private val _totalFactoryProduction = mutableStateOf(0L)
-    val totalFactoryProduction: State<Long> = _totalFactoryProduction
-
-    private val _totalGrossProfit = mutableStateOf<Long>(0L)
-    val totalGrossProfit: State<Long> = _totalGrossProfit
-
-    private val _totalNetProfit = mutableStateOf<Long>(0L)
-    val totalNetProfit: State<Long> = _totalNetProfit
+    private val _totalIngredientsCost = mutableStateOf(0L)
+    val totalIngredientsCost: State<Long> = _totalIngredientsCost
 
     private val _showAddFab = mutableStateOf(false)
     val showAddFab: State<Boolean> = _showAddFab
@@ -71,44 +65,44 @@ class ProductionViewModel @Inject constructor(
         fetchSheetJob?.cancel()
 
         fetchSheetJob = viewModelScope.launch {
-            Log.e("FECTH","production: " )
+            Log.e("FECTH", "production: ")
             dates.selectedDate.value?.let { date ->
-                productionSheet = productionRepository.getProductionSheetForDate(date)
-                if (productionSheet == FactoryProductionSheet()) {
+                usedIngredientsSheet = usedIngredientRepository.getSheetForDate(date)
+                if (usedIngredientsSheet == UsedIngredientsSheet()) {
                     initialiseEmptySheet()
                 }
-                _showAddFab.value = !productionSheet.lock_status
+                _showAddFab.value = !usedIngredientsSheet.lock_status
                 _showAddItemInput.value = !_showAddFab.value
                 mutateStates()
             }
         }
     }
 
-    private fun saveProductionSheet() {
+    private fun saveIngredientsSheet() {
         viewModelScope.launch {
-            productionRepository.saveProductionSheet(productionSheet)
+            usedIngredientRepository.save(usedIngredientsSheet)
             mutateStates()
         }
     }
 
-    fun deleteProductionSheet() {
+    fun deleteIngredientsSheet() {
         viewModelScope.launch {
-            productionRepository.delete(productionSheet.document_id)
-            productionSheet = FactoryProductionSheet()
+            usedIngredientRepository.delete(usedIngredientsSheet.document_id)
+            usedIngredientsSheet = UsedIngredientsSheet()
             initialiseEmptySheet()
             mutateStates()
         }
     }
 
-    fun deleteItem(item: FactoryProductionItem, index: Int) {
-        if (productionSheet.items[index] == item) {
-            productionSheet.items.removeAt(index)
-            saveProductionSheet()
+    fun deleteItem(item: UsedIngredientItem, index: Int) {
+        if (usedIngredientsSheet.items[index] == item) {
+            usedIngredientsSheet.items.removeAt(index)
+            saveIngredientsSheet()
         }
     }
 
     private fun initialiseEmptySheet() {
-        with(productionSheet) {
+        with(usedIngredientsSheet) {
             date = dates.selectedDate.value!!
             utc = dates.instance.value!!.timeInMillis
             document_id = date
@@ -118,11 +112,9 @@ class ProductionViewModel @Inject constructor(
     }
 
     private fun mutateStates() {
-        _editStatus.value = !productionSheet.lock_status
-        _itemsList.value = productionSheet.items
-        _totalFactoryProduction.value = productionSheet.totalWholeSales.toLong()
-        _totalGrossProfit.value = productionSheet.totalGrossProfit.toLong()
-        _totalNetProfit.value = productionSheet.totalNetProfit.toLong()
+        _editStatus.value = !usedIngredientsSheet.lock_status
+        _itemsList.value = usedIngredientsSheet.items
+        _totalIngredientsCost.value = usedIngredientsSheet.totalUsedIngredients.toLong()
     }
 
     fun onAddFabClick() {
@@ -130,17 +122,23 @@ class ProductionViewModel @Inject constructor(
         _showAddFab.value = false
     }
 
+    fun onIngredientSelected(ingredient: BakeryIngredient) {
+        addIngredientFormState.qtyInputHint = "Used ${ingredient.ingredient_pack_unit}"
+        addIngredientFormState.onProductSelected(ingredient)
+    }
+
     fun onQueryChanged(newQuery: String) {
-        addProductFormState.onQueryChanged(newQuery) { item, query ->
-            item.product.contains(query, true)
+        addIngredientFormState.onQueryChanged(newQuery) { item, query ->
+            item.ingredient_name.contains(query, true)
         }
     }
 
     fun onAddItem() {
-        with(addProductFormState) {
-            val item = FactoryProductionItem(selectedOption!!, qty.toInt())
-            productionSheet.items.add(item)
-            saveProductionSheet()
+        with(addIngredientFormState) {
+            val ingredient = UsedIngredientItem(selectedOption!!, qty)
+            usedIngredientsSheet.items.add(ingredient)
+            saveIngredientsSheet()
+            qtyInputHint = "Qty"
             clearInputs()
         }
     }

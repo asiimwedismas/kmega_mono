@@ -40,6 +40,12 @@ object RepositoryModule {
 
     @Provides
     @Singleton
+    fun provideUsedIngredientsRepository(
+        @UsedIngredientsCollection collectionReference: CollectionReference,
+    ): UsedIngredientsRepository = UsedIngredientsRepositoryImpl(collectionReference)
+
+    @Provides
+    @Singleton
     fun provideDispatchRepository(
         @DispatchedCollection collectionReference: CollectionReference,
     ): DispatchesRepository = DispatchesRepositoryImp(collectionReference)

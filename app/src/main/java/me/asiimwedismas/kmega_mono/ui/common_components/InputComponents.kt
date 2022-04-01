@@ -38,7 +38,7 @@ fun <T> AutoCompleteTextView(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Column {
-        TextField(
+        OutlinedTextField(
             modifier = modifier
                 .fillMaxWidth(),
             value = query,

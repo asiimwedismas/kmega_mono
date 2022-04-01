@@ -86,7 +86,9 @@ fun FactoryScreensTabRow(
             .height(TabHeight)
             .fillMaxWidth()
     ) {
-        Row(Modifier.selectableGroup()) {
+        Row(Modifier
+            .selectableGroup()
+            .horizontalScroll(rememberScrollState(), true)) {
             allScreens.forEach { screen ->
                 Tab(
                     text = screen.name,

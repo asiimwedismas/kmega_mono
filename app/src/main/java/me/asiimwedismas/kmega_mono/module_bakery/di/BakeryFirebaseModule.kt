@@ -14,6 +14,7 @@ import me.asiimwedismas.kmega_mono.common.Constants.EXPIRED_COLLECTION
 import me.asiimwedismas.kmega_mono.common.Constants.OUTLET_DELIVERY_COLLECTION
 import me.asiimwedismas.kmega_mono.common.Constants.PRODUCTION_COLLECTION
 import me.asiimwedismas.kmega_mono.common.Constants.RETURNS_COLLECTION
+import me.asiimwedismas.kmega_mono.common.Constants.USED_INGREDIENTS_COLLECTION
 import me.asiimwedismas.kmega_mono.common.Constants.v2_BAKERY
 import javax.inject.Named
 import javax.inject.Qualifier
@@ -36,6 +37,13 @@ object BakeryFirebaseModule {
     fun provideProductionCollection(
         @Named(v2_BAKERY) bakeryDocument: DocumentReference,
     ) = bakeryDocument.collection(PRODUCTION_COLLECTION)
+
+    @Provides
+    @Singleton
+    @UsedIngredientsCollection
+    fun provideUsedIngredientsCollection(
+        @Named(v2_BAKERY) bakeryDocument: DocumentReference,
+    ) = bakeryDocument.collection(USED_INGREDIENTS_COLLECTION)
 
     @Provides
     @Singleton
@@ -149,3 +157,7 @@ annotation class ReturnsCollection
 @Retention(AnnotationRetention.BINARY)
 @Qualifier
 annotation class AuditCollection
+
+@Retention(AnnotationRetention.BINARY)
+@Qualifier
+annotation class UsedIngredientsCollection

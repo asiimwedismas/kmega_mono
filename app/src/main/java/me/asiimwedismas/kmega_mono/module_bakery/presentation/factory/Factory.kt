@@ -28,7 +28,10 @@ import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.production
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.production.components.MeduimAppBar
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.store_balance.StoreBalanceScreen
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.store_balance.StoreBalanceViewModel
+import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.used_ingredients.UsedIngredientsScreen
+import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.used_ingredients.UsedIngredientsViewModel
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.components.FactoryScreensTabRow
+import me.asiimwedismas.kmega_mono.ui.common_components.DatePickerDialog
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,6 +42,7 @@ fun Factory(
     productionViewModel: ProductionViewModel = hiltViewModel(),
     storeBalanceViewModel: StoreBalanceViewModel = hiltViewModel(),
     damagesViewModel: DamagesViewModel = hiltViewModel(),
+    usedIngredientsViewModel: UsedIngredientsViewModel = hiltViewModel(),
 ) {
     val allScreens = FactoryScreens.values().toList()
     val navController = rememberNavController()
@@ -58,6 +62,7 @@ fun Factory(
         factoryViewModel.damagesViewModel = damagesViewModel
         factoryViewModel.productionViewModel = productionViewModel
         factoryViewModel.storeBalanceViewModel = storeBalanceViewModel
+        factoryViewModel.usedIngredientsViewModel = usedIngredientsViewModel
     }
 
     Scaffold(
@@ -79,6 +84,13 @@ fun Factory(
                 currentScreen = currentScreen)
         }
     ) { innerPadding ->
+        if (showCalendar) {
+            DatePickerDialog(
+                currentSelected = factoryViewModel.dates.instance.value!!.timeInMillis,
+                onDateSelected = factoryViewModel::changeDate,
+                onDismiss = factoryViewModel::toggleShowCalendar
+            )
+        }
         NavHost(
             navController = navController,
             startDestination = Production.name,
@@ -92,6 +104,9 @@ fun Factory(
             }
             composable(Audit.name) {
                 StoreBalanceScreen(storeBalanceViewModel)
+            }
+            composable(Used_Ingredients.name){
+                UsedIngredientsScreen(usedIngredientsViewModel)
             }
         }
     }

@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.TextField
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Text
@@ -27,6 +27,7 @@ import me.asiimwedismas.kmega_mono.ui.common_components.AutoCompleteTextView
 @Composable
 fun <T> AddProductForm(
     label: String,
+    qtyLabel: String = "Qty",
     query: String,
     onQueryChanged: (String) -> Unit,
     onOptionSelected: (T) -> Unit,
@@ -51,7 +52,10 @@ fun <T> AddProductForm(
             )
             Spacer(modifier = Modifier.height(8.dp))
             val keyboardController = LocalSoftwareKeyboardController.current
-            TextField(
+            OutlinedTextField(
+                label = {
+                    Text(text = qtyLabel)
+                },
                 value = productQty,
                 onValueChange = onQtyChanged,
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
@@ -82,14 +86,15 @@ class AddProductFormState<T>(
 ) {
     var query by mutableStateOf("")
     var predictions by mutableStateOf(emptyList<T>())
+    var qtyInputHint by mutableStateOf("")
     var qtyInput by mutableStateOf("")
     var submit by mutableStateOf(false)
 
-    var qty: Int = 0
+    var qty: Float = 0F
     var selectedOption: T? = null
 
     private fun shouldEnableSave() {
-        submit = (qty != 0 && selectedOption != null)
+        submit = (qty != 0F && selectedOption != null)
     }
 
     fun onQueryChanged(newQuery: String, predicate: (T, String) -> Boolean) {
@@ -106,9 +111,9 @@ class AddProductFormState<T>(
         this.qtyInput = inputQty
 
         qty = if (inputQty.isNotBlank()) {
-            inputQty.toInt()
+            inputQty.toFloat()
         } else {
-            0
+            0F
         }
         shouldEnableSave()
     }
@@ -133,7 +138,7 @@ class AddProductFormState<T>(
 
     private fun clearProductQtyInput() {
         qtyInput = ""
-        qty = 0
+        qty = 0F
         shouldEnableSave()
     }
 

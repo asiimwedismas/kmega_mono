@@ -29,14 +29,11 @@ class DamagesViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    val dates: SearchDates = SearchDates()
+    private val dates: SearchDates = SearchDates()
     val productList: LiveData<List<BakeryProduct>> = allProducts()
     val addProductFormState = AddProductFormState<BakeryProduct>("Select product", emptyList())
 
     private var expiredInvoice: BakeryInvoice = BakeryInvoice()
-
-    private val _showCalendar = mutableStateOf(false)
-    val showCalendar: State<Boolean> = _showCalendar
 
     private val _itemsList = mutableStateOf<List<BakeryInvoiceItem>>(listOf())
     val itemsList: State<List<BakeryInvoiceItem>> = _itemsList
@@ -65,19 +62,7 @@ class DamagesViewModel @Inject constructor(
         fetchSheet()
     }
 
-    fun selectPreviousDate() {
-        changeDate(dates.instance.value!!.getPreviousDate())
-    }
-
-    fun selectNextDate() {
-        changeDate(dates.instance.value!!.getNextDate())
-    }
-
-    fun toggleShowCalendar() {
-        _showCalendar.value = !_showCalendar.value
-    }
-
-    fun changeDate(calendar: Calendar) {
+    fun changeDate(calendar: Calendar?) {
         dates.instance = MutableLiveData(calendar)
         fetchSheet()
     }
@@ -135,7 +120,7 @@ class DamagesViewModel @Inject constructor(
     }
 
     private fun mutateStates() {
-        _editStatus.value = expiredInvoice.isLocked
+        _editStatus.value = !expiredInvoice.isLocked
         _itemsList.value = expiredInvoice.items
         _totalWholeSales.value = expiredInvoice.totalFactorySale.toLong()
         _totalGrossProfit.value = expiredInvoice.totalFactoryProfitGross.toLong()
@@ -155,7 +140,7 @@ class DamagesViewModel @Inject constructor(
 
     fun onAddItem() {
         with(addProductFormState) {
-            val item = BakeryInvoiceItem(selectedOption!!, qty)
+            val item = BakeryInvoiceItem(selectedOption!!, qty.toInt())
             expiredInvoice.items.add(item)
             saveProductionSheet()
             clearInputs()
