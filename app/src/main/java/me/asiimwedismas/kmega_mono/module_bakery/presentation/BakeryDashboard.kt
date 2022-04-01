@@ -12,11 +12,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.BakeryScreen.*
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.Factory
+import me.asiimwedismas.kmega_mono.module_bakery.presentation.ingredient.IngredientScreen
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.BakeryReport
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.components.BakeryScreensTabRow
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
 fun BakeryDashboard() {
     val allScreens = values().toList()
@@ -52,6 +53,11 @@ fun BakeryDashboard() {
                     currentScreen = currentScreen
                 )
             }
+        }
+        composable(Ingredients.name){
+            IngredientScreen(
+                onNavigationIconClick = navController::navigateUp
+            )
         }
         composable(Factory.name) {
             Factory(

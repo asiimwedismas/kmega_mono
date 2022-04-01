@@ -19,6 +19,7 @@ import me.asiimwedismas.kmega_mono.module_bakery.presentation.ingredient.compone
 @ExperimentalMaterial3Api
 @Composable
 fun IngredientScreen(
+    onNavigationIconClick: () -> Unit,
     viewModel: IngredientViewModel = hiltViewModel(),
 ) {
 
@@ -36,7 +37,8 @@ fun IngredientScreen(
         topBar = {
             IngredientAppBar(
                 scrollBehavior = scrollBehavior,
-                navAction = {}
+                navAction = onNavigationIconClick,
+                onRefresh = viewModel::onSycnDB
             )
         },
         floatingActionButton = {
