@@ -18,16 +18,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import me.asiimwedismas.kmega_mono.module_bakery.domain.model.DispatchedBreakDown
-import me.asiimwedismas.kmega_mono.module_bakery.domain.model.DispatchesReportCard
-import me.asiimwedismas.kmega_mono.module_bakery.domain.model.FactoryReportCard
-import me.asiimwedismas.kmega_mono.module_bakery.domain.model.OutletReportCard
+import me.asiimwedismas.kmega_mono.module_bakery.domain.model.*
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.production.components.AppBar
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.BakeryReportScreen.*
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.components.BakeryReportTabRow
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.dispatches.DispatchedBreakDownScreen
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.dispatches.DispatchesBody
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.factory.FactoryBody
+import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.moneys.MoneysScreen
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.outlets.OutletsBody
 import me.asiimwedismas.kmega_mono.ui.common_components.DatePickerDialog
 
@@ -53,6 +51,7 @@ fun BakeryReport(
     val salesmenReport by viewModel.dispatchesReportCard
     val outletsReport by viewModel.outletsReportCard
     val unaccountedForDispatches by viewModel.dispatchedBreakDownReportCard
+    val moneysReportCard by viewModel.moneysReportCard
 
     Scaffold(
         topBar = {
@@ -92,7 +91,8 @@ fun BakeryReport(
                 factoryReportCard = factoryReportCard,
                 dispatchesReport = salesmenReport,
                 outletsReport = outletsReport,
-                dispatchedBreakDownReport = unaccountedForDispatches
+                dispatchedBreakDownReport = unaccountedForDispatches,
+                moneysReport = moneysReportCard
             )
         }
     }
@@ -106,23 +106,27 @@ fun BakeryReportNavHost(
     dispatchesReport: DispatchesReportCard,
     outletsReport: OutletReportCard,
     dispatchedBreakDownReport: DispatchedBreakDown,
+    moneysReport: MoneysReportCard,
 ) {
     NavHost(
         navController = navController,
-        startDestination = Breakdown.name,
+        startDestination = Analysis.name,
         modifier = modifier
     ) {
-        composable(Breakdown.name) {
-            DispatchedBreakDownScreen(dispatchedBreakDownReport)
-        }
         composable(Factory.name) {
             FactoryBody(factoryReportCard)
         }
-        composable(Dispatches.name) {
+        composable(Dispatched.name) {
             DispatchesBody(dispatchesReport)
         }
         composable(Outlets.name) {
             OutletsBody(outletsReport)
+        }
+        composable(Moneys.name){
+            MoneysScreen(moneysReport)
+        }
+        composable(Analysis.name) {
+            DispatchedBreakDownScreen(dispatchedBreakDownReport)
         }
     }
 }

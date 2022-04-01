@@ -13,10 +13,7 @@ import me.asiimwedismas.kmega_mono.common.SearchDates
 import me.asiimwedismas.kmega_mono.common.di.CoroutineDispatchersProvider
 import me.asiimwedismas.kmega_mono.common.getNextDate
 import me.asiimwedismas.kmega_mono.common.getPreviousDate
-import me.asiimwedismas.kmega_mono.module_bakery.domain.model.DispatchedBreakDown
-import me.asiimwedismas.kmega_mono.module_bakery.domain.model.DispatchesReportCard
-import me.asiimwedismas.kmega_mono.module_bakery.domain.model.FactoryReportCard
-import me.asiimwedismas.kmega_mono.module_bakery.domain.model.OutletReportCard
+import me.asiimwedismas.kmega_mono.module_bakery.domain.model.*
 import me.asiimwedismas.kmega_mono.module_bakery.domain.use_case.bakery_report.DatedFactoryReport
 import me.asiimwedismas.kmega_mono.module_bakery.domain.use_case.bakery_report.DatedOutletReport
 import me.asiimwedismas.kmega_mono.module_bakery.domain.use_case.bakery_report.DatedSalesmenReport
@@ -34,25 +31,31 @@ class BakeryReportViewModel @Inject constructor(
 
     var makeReportJob: Job? = null
 
-    private val _dispatchesReportCard = mutableStateOf(DispatchesReportCard.createEmpty())
+    private val initDispatchesCard = DispatchesReportCard.createEmpty()
+    private val _dispatchesReportCard = mutableStateOf(initDispatchesCard)
     val dispatchesReportCard: State<DispatchesReportCard> = _dispatchesReportCard
 
-    private val _factoryReportCard = mutableStateOf(FactoryReportCard.emptyCard())
+    private val initFactoryReportCard = FactoryReportCard.emptyCard()
+    private val _factoryReportCard = mutableStateOf(initFactoryReportCard)
     val factoryReportCard: State<FactoryReportCard> = _factoryReportCard
 
-    private val _outletsReportCard =
-        mutableStateOf<OutletReportCard>(OutletReportCard.createEmpty())
+    private val initOutletReportCard = OutletReportCard.createEmpty()
+    private val _outletsReportCard = mutableStateOf(initOutletReportCard)
     val outletsReportCard: State<OutletReportCard> = _outletsReportCard
 
-    private val _dispatchedBreakdownReportCard = mutableStateOf(DispatchedBreakDown(
-        FactoryReportCard.emptyCard()))
-    val dispatchedBreakDownReportCard: State<DispatchedBreakDown> =
-        _dispatchedBreakdownReportCard
+    private val initBreakDown = DispatchedBreakDown(FactoryReportCard.emptyCard())
+    private val _dispatchedBreakdownReportCard = mutableStateOf(initBreakDown)
+    val dispatchedBreakDownReportCard: State<DispatchedBreakDown> = _dispatchedBreakdownReportCard
+
+    private val initMoneysReportCard = MoneysReportCard(initDispatchesCard, initOutletReportCard)
+    private val _moneysReportCard = mutableStateOf(initMoneysReportCard)
+    val moneysReportCard: State<MoneysReportCard> = _moneysReportCard
+
 
     private val _showCalendar = mutableStateOf(false)
     val showCalendar: State<Boolean> = _showCalendar
 
-    private val _makingReport = mutableStateOf<Boolean>(true)
+    private val _makingReport = mutableStateOf(true)
     val makingReport: State<Boolean> = _makingReport
 
     init {
@@ -109,6 +112,12 @@ class BakeryReportViewModel @Inject constructor(
                 _dispatchesReportCard.value = dispatchesReport
                 _outletsReportCard.value = outletReport
                 _dispatchedBreakdownReportCard.value = factReport.dispatchedBreakDown
+
+
+                _moneysReportCard.value = MoneysReportCard(
+                    dispatchesReport,
+                    outletReport
+                )
             }
             _makingReport.value = false
         }

@@ -57,7 +57,6 @@ class ExpiredRepositoryImp(
 
     override suspend fun getExpiredForFieldForDate(date: String): List<BakeryInvoice> {
         return collectionReference
-            .whereEqualTo("agent_id", null)
             .whereEqualTo("outlet_id", null)
             .whereEqualTo("date", date)
             .get()

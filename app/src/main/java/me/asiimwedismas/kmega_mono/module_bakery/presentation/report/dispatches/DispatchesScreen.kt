@@ -16,8 +16,8 @@ fun DispatchesBody(
 ) {
     val categories = listOf(
         ReportCategory("Unaccounted for", reportCard.unaccounted, ColorsCyan200),
-        ReportCategory("Salesmen shortages", reportCard.salesmenShortages, ColorsCyan200),
         ReportCategory("Cash handovers", reportCard.handovers, Pink40),
+        ReportCategory("Salesmen shortages", reportCard.salesmenShortages, ColorsCyan200),
         ReportCategory("Outlet deliveries", reportCard.outletsDeliveries, ColorsOrange200),
         ReportCategory("Agent discounts", reportCard.agentDiscounts, ColorsYellow200),
         ReportCategory("Debit sales", reportCard.debitSales, ColorsGreen200),

@@ -47,7 +47,6 @@ val Typography = Typography(
 )
 
 val TypographyM2 = androidx.compose.material.Typography(
-    defaultFontFamily = RobotoCondensed,
     h1 = TextStyle(
         fontWeight = FontWeight.W100,
         fontSize = 96.sp,

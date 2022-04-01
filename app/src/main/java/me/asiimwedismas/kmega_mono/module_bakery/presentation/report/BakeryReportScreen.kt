@@ -6,27 +6,37 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 enum class BakeryReportScreen(
     val icon: ImageVector,
+    val title: String
 ) {
-    Breakdown(
-        icon = Icons.TwoTone.Functions
+    Analysis(
+        icon = Icons.TwoTone.Analytics,
+        title = "Dispatch analysis"
     ),
     Factory(
-        icon = Icons.TwoTone.PrecisionManufacturing
+        icon = Icons.TwoTone.Business,
+        title = "Store"
     ),
-    Dispatches(
-        icon = Icons.TwoTone.Outbound
+    Dispatched(
+        icon = Icons.TwoTone.LocalShipping,
+        title = "Dispatched"
     ),
     Outlets(
-        icon = Icons.TwoTone.Store
+        icon = Icons.TwoTone.Store,
+        title = "Outlets"
+    ),
+    Moneys(
+        icon = Icons.TwoTone.MonetizationOn,
+        title = "Collection spending"
     );
 
     companion object {
         fun fromRoute(route: String?): BakeryReportScreen {
             return when (route?.substringBefore("/")) {
                 Factory.name, null -> Factory
-                Dispatches.name -> Dispatches
+                Dispatched.name -> Dispatched
                 Outlets.name -> Outlets
-                Breakdown.name -> Breakdown
+                Analysis.name -> Analysis
+                Moneys.name -> Moneys
                 else -> throw IllegalArgumentException("Route $route doesn't exist")
             }
         }

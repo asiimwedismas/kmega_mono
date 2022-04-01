@@ -6,6 +6,7 @@
         <item name="android:navigationBarColor" tools:targetApi="l">@android:color/transparent
         </item>
         <!-- Customize your theme here. -->
+<!--        <item name="android:fontFamily">@font/ubuntu</item>-->
     </style>
 
     <style name="Theme.Kmega_mono" parent="Base.Theme.Kmega_mono" />
