@@ -21,7 +21,7 @@ class IngredientViewModel @Inject constructor(
         get() = allIngredients()
 
     @OptIn(DelicateCoroutinesApi::class)
-    fun onSycnDB() = GlobalScope.launch(Dispatchers.IO) {
+    fun onSyncDB() = GlobalScope.launch(Dispatchers.IO) {
         databaseSync()
     }
 }

@@ -38,7 +38,7 @@ fun IngredientScreen(
             IngredientAppBar(
                 scrollBehavior = scrollBehavior,
                 navAction = onNavigationIconClick,
-                onRefresh = viewModel::onSycnDB
+                onRefresh = viewModel::onSyncDB
             )
         },
         floatingActionButton = {

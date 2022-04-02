@@ -5,7 +5,6 @@ import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -13,7 +12,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -25,7 +23,6 @@ import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.damages.Da
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.production.ProductionScreen
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.production.ProductionViewModel
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.production.components.AppBar
-import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.production.components.MeduimAppBar
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.store_balance.StoreBalanceScreen
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.store_balance.StoreBalanceViewModel
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.used_ingredients.UsedIngredientsScreen
@@ -105,7 +102,7 @@ fun Factory(
             composable(Audit.name) {
                 StoreBalanceScreen(storeBalanceViewModel)
             }
-            composable(Used_Ingredients.name){
+            composable(Ingredients.name){
                 UsedIngredientsScreen(usedIngredientsViewModel)
             }
         }

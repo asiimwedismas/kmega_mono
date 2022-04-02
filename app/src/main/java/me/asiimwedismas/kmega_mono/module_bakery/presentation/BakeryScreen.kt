@@ -11,7 +11,7 @@ enum class BakeryScreen(
     val title: String
 ) {
     Ingredients(
-        icon = Icons.TwoTone.EmojiFoodBeverage,
+        icon = Icons.TwoTone.ShoppingCart,
         title = "Ingredients"
     ),
     Factory(
