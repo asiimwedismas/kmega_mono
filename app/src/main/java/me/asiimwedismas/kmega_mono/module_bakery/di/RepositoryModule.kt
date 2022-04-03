@@ -86,10 +86,12 @@ object RepositoryModule {
         @SalesmenHandoversCollection salesmenReference: CollectionReference,
         @OutletHandoversCollection outletReference: CollectionReference,
         @SalesmenFieldExpendituresCollection fieldExpendituresReference: CollectionReference,
+        @SafeTransactionsCollection safeTransactionsCollection: CollectionReference
     ): FinancesRepository =
         FinancesRepositoryImp(
             salesmenReference,
             outletReference,
-            fieldExpendituresReference
+            fieldExpendituresReference,
+            safeTransactionsCollection
         )
 }

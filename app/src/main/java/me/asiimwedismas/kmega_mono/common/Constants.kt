@@ -5,6 +5,7 @@ object Constants {
     const val v2_BAKERY = "bakery_document"
     const val PRODUCTION_COLLECTION = "production"
     const val USED_INGREDIENTS_COLLECTION = "used_ingredients"
+    const val SAFE_TRANSACTIONS_COLLECTION = "safe_transactions"
     const val DISPATCH_COLLECTION = "dispatches"
     const val OUTLET_DELIVERY_COLLECTION = "outlet_deliveries"
     const val AGENT_DELIVERY_COLLECTION = "agent_deliveries"

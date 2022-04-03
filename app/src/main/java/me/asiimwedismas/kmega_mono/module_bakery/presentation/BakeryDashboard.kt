@@ -12,6 +12,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.BakeryScreen.*
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.factory.Factory
+import me.asiimwedismas.kmega_mono.module_bakery.presentation.finance.FinanceScreen
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.ingredient.IngredientScreen
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.BakeryReport
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.components.BakeryScreensTabRow
@@ -66,6 +67,11 @@ fun BakeryDashboard() {
         }
         composable(Report.name) {
             BakeryReport(
+                onNavigationIconClick = navController::navigateUp
+            )
+        }
+        composable(Expenditures.name){
+            FinanceScreen(
                 onNavigationIconClick = navController::navigateUp
             )
         }

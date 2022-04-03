@@ -5,12 +5,14 @@ import kotlinx.coroutines.tasks.await
 import me.asiimwedismas.kmega_mono.module_bakery.domain.model.CashierStanding
 import me.asiimwedismas.kmega_mono.module_bakery.domain.model.FieldExpenditure
 import me.asiimwedismas.kmega_mono.module_bakery.domain.model.OutletsDaySheet
+import me.asiimwedismas.kmega_mono.module_bakery.domain.model.SafeTransactionsSheet
 import me.asiimwedismas.kmega_mono.module_bakery.domain.repository.FinancesRepository
 
 class FinancesRepositoryImp(
     private val salesmenReference: CollectionReference,
     private val outletsReference: CollectionReference,
     private val fieldExpenditureReference: CollectionReference,
+    private val safeTransactionsReference: CollectionReference,
 ) : FinancesRepository {
     override suspend fun getSalesmenHandoversForDate(date: String): List<CashierStanding> {
         return salesmenReference
@@ -35,6 +37,37 @@ class FinancesRepositoryImp(
             .await()
             .toObjects(OutletsDaySheet::class.java)
             .firstOrNull() ?: OutletsDaySheet()
+    }
+
+    override suspend fun deleteSafeTransactionSheet(sheetID: String) {
+        safeTransactionsReference.document(sheetID).delete().await()
+    }
+
+    override suspend fun saveSafeTransactionSheet(safeTransactionsSheet: SafeTransactionsSheet) {
+        if (safeTransactionsSheet.document_id.isEmpty()) {
+            safeTransactionsSheet.document_id = safeTransactionsSheet.date
+        }
+
+        safeTransactionsReference.document(safeTransactionsSheet.document_id).set(safeTransactionsSheet)
+            .await()
+    }
+
+    override suspend fun getSafeTransactionSheetForDate(date: String): SafeTransactionsSheet {
+        return safeTransactionsReference
+            .document(date)
+            .get()
+            .await()
+            .toObject(SafeTransactionsSheet::class.java) ?: SafeTransactionsSheet()
+    }
+
+    override suspend fun getSafeTransactionSheetsInRange(from: Long, to: Long): List<SafeTransactionsSheet> {
+        return safeTransactionsReference
+            .whereGreaterThanOrEqualTo("utc", from)
+            .whereLessThanOrEqualTo("utc", to)
+            .orderBy("utc")
+            .get()
+            .await()
+            .toObjects(SafeTransactionsSheet::class.java)
     }
 
 }

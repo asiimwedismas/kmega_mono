@@ -126,7 +126,6 @@ fun UsedIngredientsContent(
             )
         }
     }
-
 }
 
 @OptIn(ExperimentalMaterialApi::class)
