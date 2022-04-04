@@ -1,18 +1,11 @@
 package me.asiimwedismas.kmega_mono.ui.common_components
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.ExpandLess
-import androidx.compose.material.icons.filled.ExpandMore
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -22,7 +15,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.window.PopupProperties
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
 fun <T> AutoCompleteTextView(
     modifier: Modifier = Modifier,
@@ -36,8 +29,12 @@ fun <T> AutoCompleteTextView(
     onImeAction: () -> Unit = {},
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
-
-    Column {
+    ExposedDropdownMenuBox(
+        expanded = predictions.isNotEmpty(),
+        onExpandedChange = {
+            onTogglePredictions()
+        }
+    ) {
         OutlinedTextField(
             modifier = modifier
                 .fillMaxWidth(),
@@ -45,22 +42,15 @@ fun <T> AutoCompleteTextView(
             onValueChange = onQueryChanged,
             label = { Text(label) },
             singleLine = true,
-            leadingIcon = {
-                if (predictions.isNotEmpty()){
-                    IconButton(onClick = { onTogglePredictions() }) {
-                        Icon(imageVector = Icons.Filled.ExpandLess, contentDescription = "Close")
-                    }
-                }else{
-                    IconButton(onClick = { onTogglePredictions() }) {
-                        Icon(imageVector = Icons.Filled.ExpandMore, contentDescription = "Show")
-                    }
-                }
-            },
             trailingIcon = {
                 if (query.isNotEmpty()) {
                     IconButton(onClick = { onClearClick() }) {
-                        Icon(imageVector = Icons.Filled.Close, contentDescription = "clear")
+                        Icon(imageVector = Icons.Filled.Clear, contentDescription = "clear")
                     }
+                }else{
+                    ExposedDropdownMenuDefaults.TrailingIcon(
+                        expanded = predictions.isNotEmpty()
+                    )
                 }
             },
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done,
@@ -69,14 +59,15 @@ fun <T> AutoCompleteTextView(
                 onImeAction()
                 keyboardController?.hide()
             }),
+            colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
         )
         if (predictions.isNotEmpty()) {
             DropdownMenu(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.3f),
+                modifier = Modifier.exposedDropdownSize(),
                 expanded = predictions.isNotEmpty(),
-                onDismissRequest = { },
+                onDismissRequest = {
+                    onTogglePredictions()
+                },
                 properties = PopupProperties(focusable = false)
             ) {
                 predictions.forEach { prediction ->
@@ -89,7 +80,6 @@ fun <T> AutoCompleteTextView(
                 }
             }
         }
-
     }
 }
 

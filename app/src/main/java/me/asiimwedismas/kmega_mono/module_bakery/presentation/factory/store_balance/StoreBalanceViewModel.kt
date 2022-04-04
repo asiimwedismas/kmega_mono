@@ -56,6 +56,9 @@ class StoreBalanceViewModel @Inject constructor(
     private val _editStatus = mutableStateOf<Boolean>(false)
     val editStatus: State<Boolean> = _editStatus
 
+    private val _isLoadingData = mutableStateOf<Boolean>(true)
+    val isLoadingData: State<Boolean> = _isLoadingData
+
     var fetchSheetJob: Job? = null
 
     init {
@@ -73,6 +76,7 @@ class StoreBalanceViewModel @Inject constructor(
         fetchSheetJob = viewModelScope.launch {
             Log.e("FECTH","store audit: " )
             dates.selectedDate.value?.let { date ->
+                _isLoadingData.value = true
                 storeBalanceInvoice = auditRepository.getAuditForFactoryForDate(date)
                 if (storeBalanceInvoice == BakeryInvoice()) {
                     initialiseEmptySheet()
@@ -86,6 +90,7 @@ class StoreBalanceViewModel @Inject constructor(
 
     private fun saveProductionSheet() {
         viewModelScope.launch {
+            _isLoadingData.value = true
             auditRepository.saveAudit(storeBalanceInvoice)
             mutateStates()
         }
@@ -93,6 +98,7 @@ class StoreBalanceViewModel @Inject constructor(
 
     fun deleteProductionSheet() {
         viewModelScope.launch {
+            _isLoadingData.value = true
             auditRepository.delete(storeBalanceInvoice.document_id)
             storeBalanceInvoice = BakeryInvoice()
             initialiseEmptySheet()
@@ -125,6 +131,7 @@ class StoreBalanceViewModel @Inject constructor(
         _totalWholeSales.value = storeBalanceInvoice.totalFactorySale.toLong()
         _totalGrossProfit.value = storeBalanceInvoice.totalFactoryProfitGross.toLong()
         _totalNetProfit.value = storeBalanceInvoice.totalFactoryProfitNet.toLong()
+        _isLoadingData.value = false
     }
 
     fun onAddFabClick() {

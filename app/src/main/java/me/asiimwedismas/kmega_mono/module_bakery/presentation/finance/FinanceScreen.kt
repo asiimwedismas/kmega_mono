@@ -20,8 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import me.asiimwedismas.kmega_mono.module_bakery.domain.model.SafeTransactionItem
@@ -67,8 +65,10 @@ fun FinanceScreen(
     val showCollectionsList by viewModel.showCollectionsList
     val collectionsList by viewModel.collectionsList
 
-//    val previousDayGrossProfit by viewModel.previousDayGrossProfit
+    val previousDayFlour by viewModel.previousDayFlour
     val previousDayNetProfit by viewModel.previousDayNetProfit
+
+    val isLoadingData by viewModel.isLoadingData
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -83,7 +83,7 @@ fun FinanceScreen(
             )
         },
         floatingActionButton = {
-            if (showAddFab) {
+            if (showAddFab && !isLoadingData) {
                 AddItemFAB(viewModel::onAddFabClick)
             }
         }
@@ -96,6 +96,11 @@ fun FinanceScreen(
             )
         }
         Column(modifier = Modifier.padding(16.dp)) {
+            if (isLoadingData) {
+                LinearProgressIndicator(
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
             if (showAddItemInput) {
                 AddSafeTransactionForm(
                     label = "Select category",
@@ -114,32 +119,37 @@ fun FinanceScreen(
                     onExpandPredictions = viewModel::onTogglePredictions
                 )
             }
-            Row {
+            Column() {
                 Card(
                     modifier = Modifier
-                        .weight(1f)
+                        .fillMaxWidth()
                         .clickable { viewModel.toggleShowCollectionsList() }) {
                     Text(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         text = "Collections : ${formatAmount(totalCollections)}"
                     )
                     if (showCollectionsList) {
-                        Column {
-                            for (collection in collectionsList) {
-                                Column(Modifier.fillMaxWidth()) {
-                                    Text(
-                                        text = "-- $collection",
-                                        style = MaterialTheme.typography.titleSmall,
-                                        fontWeight = FontWeight.Light,
-                                    )
-                                }
-                            }
-                        }
+                        CollectionsTable(
+                            collections = collectionsList
+                        )
                     }
                 }
-                Spacer(modifier = Modifier.width(8.dp))
-                Column {
-                    Card {
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                ) {
+                    Card(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "Used Flour",
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
+                        Text(
+                            text = formatAmount(previousDayFlour),
+                            style = TypographyM2.h6,
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Card(modifier = Modifier.weight(1f)) {
                         Text(
                             text = "NP",
                             modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -150,8 +160,8 @@ fun FinanceScreen(
                             modifier = Modifier.align(Alignment.CenterHorizontally)
                         )
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Card {
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Card(modifier = Modifier.weight(1f)) {
                         Text(
                             text = "Accounting bal",
                             modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -245,4 +255,20 @@ fun TransactionItemHolder(
             }
         }
     )
+}
+
+@Composable
+fun CollectionsTable(
+    collections: List<String>,
+) {
+    for (collection in collections) {
+        val portions = collection.split(":")
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(text = portions[0])
+            Text(text = portions[1])
+        }
+    }
 }

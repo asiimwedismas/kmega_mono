@@ -56,6 +56,9 @@ class DamagesViewModel @Inject constructor(
     private val _editStatus = mutableStateOf<Boolean>(false)
     val editStatus: State<Boolean> = _editStatus
 
+    private val _isLoadingData = mutableStateOf<Boolean>(true)
+    val isLoadingData: State<Boolean> = _isLoadingData
+
     var fetchSheetJob: Job? = null
 
     init {
@@ -73,6 +76,7 @@ class DamagesViewModel @Inject constructor(
         fetchSheetJob = viewModelScope.launch {
             Log.e("FECTH","damages: " )
             dates.selectedDate.value?.let { date ->
+                _isLoadingData.value = true
                 expiredInvoice = expiredRepository.getExpiredForFactoryForDate(date)
                 if (expiredInvoice == BakeryInvoice()) {
                     initialiseEmptySheet()
@@ -86,6 +90,7 @@ class DamagesViewModel @Inject constructor(
 
     private fun saveProductionSheet() {
         viewModelScope.launch {
+            _isLoadingData.value = true
             expiredRepository.saveExpired(expiredInvoice)
             mutateStates()
         }
@@ -93,6 +98,7 @@ class DamagesViewModel @Inject constructor(
 
     fun deleteProductionSheet() {
         viewModelScope.launch {
+            _isLoadingData.value = true
             expiredRepository.delete(expiredInvoice.document_id)
             expiredInvoice = BakeryInvoice()
             initialiseEmptySheet()
@@ -125,6 +131,7 @@ class DamagesViewModel @Inject constructor(
         _totalWholeSales.value = expiredInvoice.totalFactorySale.toLong()
         _totalGrossProfit.value = expiredInvoice.totalFactoryProfitGross.toLong()
         _totalNetProfit.value = expiredInvoice.totalFactoryProfitNet.toLong()
+        _isLoadingData.value = false
     }
 
     fun onAddFabClick() {

@@ -56,6 +56,9 @@ class ProductionViewModel @Inject constructor(
     private val _editStatus = mutableStateOf<Boolean>(false)
     val editStatus: State<Boolean> = _editStatus
 
+    private val _isLoadingData = mutableStateOf<Boolean>(true)
+    val isLoadingData: State<Boolean> = _isLoadingData
+
     var fetchSheetJob: Job? = null
 
     init {
@@ -73,6 +76,7 @@ class ProductionViewModel @Inject constructor(
         fetchSheetJob = viewModelScope.launch {
             Log.e("FECTH","production: " )
             dates.selectedDate.value?.let { date ->
+                _isLoadingData.value = true
                 productionSheet = productionRepository.getProductionSheetForDate(date)
                 if (productionSheet == FactoryProductionSheet()) {
                     initialiseEmptySheet()
@@ -86,6 +90,7 @@ class ProductionViewModel @Inject constructor(
 
     private fun saveProductionSheet() {
         viewModelScope.launch {
+            _isLoadingData.value = true
             productionRepository.saveProductionSheet(productionSheet)
             mutateStates()
         }
@@ -93,6 +98,7 @@ class ProductionViewModel @Inject constructor(
 
     fun deleteProductionSheet() {
         viewModelScope.launch {
+            _isLoadingData.value = true
             productionRepository.delete(productionSheet.document_id)
             productionSheet = FactoryProductionSheet()
             initialiseEmptySheet()
@@ -123,6 +129,7 @@ class ProductionViewModel @Inject constructor(
         _totalFactoryProduction.value = productionSheet.totalWholeSales.toLong()
         _totalGrossProfit.value = productionSheet.totalGrossProfit.toLong()
         _totalNetProfit.value = productionSheet.totalNetProfit.toLong()
+        _isLoadingData.value = false
     }
 
     fun onAddFabClick() {

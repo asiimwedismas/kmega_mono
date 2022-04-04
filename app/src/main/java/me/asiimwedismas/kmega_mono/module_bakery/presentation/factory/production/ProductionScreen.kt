@@ -59,10 +59,12 @@ fun ProductionScreen(
     val showAddItemInput by viewModel.showAddItemInput
     val editStatus by viewModel.editStatus
 
+    val isLoadingData by viewModel.isLoadingData
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
-            if (showAddFab) {
+            if (showAddFab && !isLoadingData) {
                 AddItemFAB(
                     viewModel::onAddFabClick
                 )
@@ -70,6 +72,11 @@ fun ProductionScreen(
         }
     ) {
         Column {
+            if (isLoadingData) {
+                LinearProgressIndicator(
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
             if (showAddItemInput) {
                 AddProductForm(
                     label = "Select product",

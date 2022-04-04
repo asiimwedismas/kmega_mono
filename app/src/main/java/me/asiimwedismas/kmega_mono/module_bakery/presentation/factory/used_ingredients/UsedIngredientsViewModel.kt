@@ -50,6 +50,9 @@ class UsedIngredientsViewModel @Inject constructor(
     private val _editStatus = mutableStateOf<Boolean>(false)
     val editStatus: State<Boolean> = _editStatus
 
+    private val _isLoadingData = mutableStateOf<Boolean>(true)
+    val isLoadingData: State<Boolean> = _isLoadingData
+
     var fetchSheetJob: Job? = null
 
     init {
@@ -67,6 +70,7 @@ class UsedIngredientsViewModel @Inject constructor(
         fetchSheetJob = viewModelScope.launch {
             Log.e("FECTH", "production: ")
             dates.selectedDate.value?.let { date ->
+                _isLoadingData.value = true
                 usedIngredientsSheet = usedIngredientRepository.getSheetForDate(date)
                 if (usedIngredientsSheet == UsedIngredientsSheet()) {
                     initialiseEmptySheet()
@@ -115,6 +119,7 @@ class UsedIngredientsViewModel @Inject constructor(
         _editStatus.value = !usedIngredientsSheet.lock_status
         _itemsList.value = usedIngredientsSheet.items
         _totalIngredientsCost.value = usedIngredientsSheet.totalUsedIngredients.toLong()
+        _isLoadingData.value = false
     }
 
     fun onAddFabClick() {

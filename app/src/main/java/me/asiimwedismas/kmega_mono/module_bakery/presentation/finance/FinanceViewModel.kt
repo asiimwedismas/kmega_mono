@@ -31,7 +31,13 @@ class FinanceViewModel @Inject constructor(
     val dates: SearchDates = SearchDates()
 
     private val initBakeryDatedFinance =
-        BakeryDatedFinances(0L, 0L, emptyList(), SafeTransactionsSheet())
+        BakeryDatedFinances(
+            0L,
+            0L,
+            0L,
+            emptyList(),
+            SafeTransactionsSheet()
+        )
     private var datedFinances: BakeryDatedFinances = initBakeryDatedFinance
 
     private var transactionsSheet: SafeTransactionsSheet = SafeTransactionsSheet()
@@ -72,6 +78,12 @@ class FinanceViewModel @Inject constructor(
     private val _previousDayNetProfit = mutableStateOf(0L)
     val previousDayNetProfit: State<Long> = _previousDayNetProfit
 
+    private val _previousDayFlour = mutableStateOf<Long>(0L)
+    val previousDayFlour: State<Long> = _previousDayFlour
+
+    private val _isLoadingData = mutableStateOf<Boolean>(true)
+    val isLoadingData: State<Boolean> = _isLoadingData
+
     val addTransactionFormState = AddSafeTransactionFormState("Select category")
 
     var fetchSheetJob: Job? = null
@@ -105,6 +117,7 @@ class FinanceViewModel @Inject constructor(
         fetchSheetJob?.cancel()
         fetchSheetJob = viewModelScope.launch {
             dates.selectedDate.value?.let { date ->
+                _isLoadingData.value = true
                 datedFinances = getDatedFinance(date, dates.previousDate.value!!)
                 transactionsSheet = datedFinances.safeTransactionsSheet
                 if (transactionsSheet == SafeTransactionsSheet()) {
@@ -123,6 +136,7 @@ class FinanceViewModel @Inject constructor(
         _totalTransactions.value = transactionsSheet.totalTransactions.toLong()
         _totalCollections.value = datedFinances.collections
         _collectionsList.value = datedFinances.collectionsList
+        _previousDayFlour.value = datedFinances.previousDayFlour
         _previousDayGrossProfit.value = datedFinances.previousDayGrossProfit
         _unaccountedFor.value = totalCollections.value - totalTransactions.value
 
@@ -130,6 +144,7 @@ class FinanceViewModel @Inject constructor(
             if (!it.isIngredient) it.amount else 0
         }
         _previousDayNetProfit.value = previousDayGrossProfit.value - totalOfNonIngredientSpending
+        _isLoadingData.value = false
     }
 
     private fun initialiseEmptySheet() {
@@ -144,6 +159,7 @@ class FinanceViewModel @Inject constructor(
 
     private fun saveSheet() {
         viewModelScope.launch {
+            _isLoadingData.value = true
             financesRepository.saveSafeTransactionSheet(transactionsSheet)
             mutateStates()
         }
@@ -151,6 +167,7 @@ class FinanceViewModel @Inject constructor(
 
     fun deleteSheet() {
         viewModelScope.launch {
+            _isLoadingData.value = true
             financesRepository.deleteSafeTransactionSheet(transactionsSheet.document_id)
             transactionsSheet = SafeTransactionsSheet()
             initialiseEmptySheet()

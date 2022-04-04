@@ -107,6 +107,13 @@ class AddProductFormState<T>(
         }
     }
 
+    fun onTogglePredictions() {
+        predictions = when {
+            predictions.isEmpty() -> optionsList
+            else -> emptyList()
+        }
+    }
+
     fun onChangeQty(inputQty: String) {
         this.qtyInput = inputQty
 

@@ -10,6 +10,10 @@ enum class FactoryScreens(
     val icon: ImageVector,
     val title: String
 ){
+    Ingredients(
+        icon = Icons.TwoTone.ShoppingCart,
+        title = "Ingredients"
+    ),
     Production(
         icon = Icons.Rounded.Cake,
         title = "Production"
@@ -21,10 +25,6 @@ enum class FactoryScreens(
     Audit(
         icon = Icons.TwoTone.Calculate,
         title = "Closing Stock"
-    ),
-    Ingredients(
-        icon = Icons.TwoTone.ShoppingCart,
-        title = "Ingredients"
     );
 
     companion object{

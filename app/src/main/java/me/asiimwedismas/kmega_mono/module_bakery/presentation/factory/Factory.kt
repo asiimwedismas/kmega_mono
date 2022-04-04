@@ -90,7 +90,7 @@ fun Factory(
         }
         NavHost(
             navController = navController,
-            startDestination = Production.name,
+            startDestination = Ingredients.name,
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Production.name) {
