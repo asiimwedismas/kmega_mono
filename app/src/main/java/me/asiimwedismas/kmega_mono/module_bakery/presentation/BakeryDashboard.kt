@@ -16,6 +16,7 @@ import me.asiimwedismas.kmega_mono.module_bakery.presentation.finance.FinanceScr
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.ingredient.IngredientScreen
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.BakeryReport
 import me.asiimwedismas.kmega_mono.module_bakery.presentation.report.components.BakeryScreensTabRow
+import me.asiimwedismas.kmega_mono.module_bakery.presentation.salesman.PeriodDeficitsReport
 
 
 @OptIn(ExperimentalMaterial3Api::class, androidx.compose.material.ExperimentalMaterialApi::class)
@@ -55,7 +56,7 @@ fun BakeryDashboard() {
                 )
             }
         }
-        composable(Ingredients.name){
+        composable(Ingredients.name) {
             IngredientScreen(
                 onNavigationIconClick = navController::navigateUp
             )
@@ -70,8 +71,13 @@ fun BakeryDashboard() {
                 onNavigationIconClick = navController::navigateUp
             )
         }
-        composable(Expenditures.name){
+        composable(Expenditures.name) {
             FinanceScreen(
+                onNavigationIconClick = navController::navigateUp
+            )
+        }
+        composable(SalesmenDeficitRange.name) {
+            PeriodDeficitsReport(
                 onNavigationIconClick = navController::navigateUp
             )
         }

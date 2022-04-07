@@ -3,6 +3,7 @@ package me.asiimwedismas.kmega_mono.module_bakery.presentation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountBalanceWallet
 import androidx.compose.material.icons.rounded.Cake
+import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.PieChart
 import androidx.compose.material.icons.twotone.*
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -26,6 +27,10 @@ enum class BakeryScreen(
     Expenditures(
         icon = Icons.Rounded.AccountBalanceWallet,
         title = "Safe transactions"
+    ),
+    SalesmenDeficitRange(
+        icon = Icons.Rounded.DateRange,
+        title = "Salesmen period deficits"
     );
 
     companion object {
@@ -36,6 +41,7 @@ enum class BakeryScreen(
                 Report.name -> Report.name
                 Ingredients.name -> Ingredients.name
                 Expenditures.name -> Expenditures.name
+                SalesmenDeficitRange.name -> SalesmenDeficitRange.name
                 else -> throw IllegalArgumentException("Route $route doesn't exist")
             }
         }

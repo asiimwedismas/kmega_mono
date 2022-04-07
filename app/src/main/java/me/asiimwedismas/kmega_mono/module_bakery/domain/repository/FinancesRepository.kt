@@ -7,6 +7,7 @@ import me.asiimwedismas.kmega_mono.module_bakery.domain.model.SafeTransactionsSh
 
 interface FinancesRepository {
     suspend fun getSalesmenHandoversForDate(date: String): List<CashierStanding>
+    suspend fun getSalesmenHandoversInRange(from: Long, to: Long): List<CashierStanding>
     suspend fun getSalesmenFieldExpendituresForDate(date: String): List<FieldExpenditure>
 
     suspend fun getOutletsDaySheetForDate(date: String): OutletsDaySheet

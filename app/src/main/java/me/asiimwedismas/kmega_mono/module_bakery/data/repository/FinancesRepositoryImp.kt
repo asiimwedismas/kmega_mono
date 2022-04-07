@@ -22,6 +22,16 @@ class FinancesRepositoryImp(
             .toObjects(CashierStanding::class.java)
     }
 
+    override suspend fun getSalesmenHandoversInRange(from: Long, to: Long): List<CashierStanding> {
+        return salesmenReference
+            .whereGreaterThanOrEqualTo("utc", from)
+            .whereLessThanOrEqualTo("utc", to)
+            .orderBy("utc")
+            .get()
+            .await()
+            .toObjects(CashierStanding::class.java)
+    }
+
     override suspend fun getSalesmenFieldExpendituresForDate(date: String): List<FieldExpenditure> {
         return fieldExpenditureReference
             .whereEqualTo("date", date)
