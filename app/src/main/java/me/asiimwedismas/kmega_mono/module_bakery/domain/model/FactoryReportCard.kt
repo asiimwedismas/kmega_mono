@@ -9,6 +9,7 @@ data class FactoryReportCard(
     val returnedList: List<BakeryInvoice>,
     val expiredList: List<BakeryInvoice>,
     val auditedList: List<BakeryInvoice>,
+    val preIngredients: List<UsedIngredientsSheet>,
 ) {
     var preProducted: Long = 0
         private set
@@ -59,6 +60,7 @@ data class FactoryReportCard(
     companion object {
         fun emptyCard(): FactoryReportCard {
             return FactoryReportCard(
+                emptyList(),
                 emptyList(),
                 emptyList(),
                 emptyList(),

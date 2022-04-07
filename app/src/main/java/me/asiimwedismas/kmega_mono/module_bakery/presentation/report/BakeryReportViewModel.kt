@@ -14,6 +14,7 @@ import me.asiimwedismas.kmega_mono.common.di.CoroutineDispatchersProvider
 import me.asiimwedismas.kmega_mono.common.getNextDate
 import me.asiimwedismas.kmega_mono.common.getPreviousDate
 import me.asiimwedismas.kmega_mono.module_bakery.domain.model.*
+import me.asiimwedismas.kmega_mono.module_bakery.domain.repository.FinancesRepository
 import me.asiimwedismas.kmega_mono.module_bakery.domain.use_case.bakery_report.DatedFactoryReport
 import me.asiimwedismas.kmega_mono.module_bakery.domain.use_case.bakery_report.DatedOutletReport
 import me.asiimwedismas.kmega_mono.module_bakery.domain.use_case.bakery_report.DatedSalesmenReport
@@ -25,6 +26,7 @@ class BakeryReportViewModel @Inject constructor(
     private val factoryReport: DatedFactoryReport,
     private val salesmenReport: DatedSalesmenReport,
     private val outletReport: DatedOutletReport,
+    private val financesRepository: FinancesRepository,
     private val disptachers: CoroutineDispatchersProvider,
 ) : ViewModel() {
     val sd = SearchDates()
@@ -50,6 +52,15 @@ class BakeryReportViewModel @Inject constructor(
     private val initMoneysReportCard = MoneysReportCard(initDispatchesCard, initOutletReportCard)
     private val _moneysReportCard = mutableStateOf(initMoneysReportCard)
     val moneysReportCard: State<MoneysReportCard> = _moneysReportCard
+
+    private val initProfitsReportCard = ProfitsReportCard(
+        initFactoryReportCard,
+        initDispatchesCard,
+        initOutletReportCard,
+        SafeTransactionsSheet()
+    )
+    private val _profitsReportCard = mutableStateOf(initProfitsReportCard)
+    val profitsReportCard: State<ProfitsReportCard> = _profitsReportCard
 
 
     private val _showCalendar = mutableStateOf(false)
@@ -90,10 +101,13 @@ class BakeryReportViewModel @Inject constructor(
                 val factoryDef = async { factoryReport(sd.previousDate.value!!, date) }
                 val dispatchesDef = async { salesmenReport(date) }
                 val outletsDef = async { outletReport(date) }
+                val safeExpenditureDef =
+                    async { financesRepository.getSafeTransactionSheetForDate(date) }
 
                 val factReport = factoryDef.await()
                 val dispatchesReport = dispatchesDef.await()
                 val outletReport = outletsDef.await()
+                val safeExpenditure = safeExpenditureDef.await()
 
                 var outletDeliveries = 0L
                 with(dispatchesReport) {
@@ -112,7 +126,12 @@ class BakeryReportViewModel @Inject constructor(
                 _dispatchesReportCard.value = dispatchesReport
                 _outletsReportCard.value = outletReport
                 _dispatchedBreakdownReportCard.value = factReport.dispatchedBreakDown
-
+                _profitsReportCard.value = ProfitsReportCard(
+                    factReport,
+                    dispatchesReport,
+                    outletReport,
+                    safeExpenditure
+                )
 
                 _moneysReportCard.value = MoneysReportCard(
                     dispatchesReport,

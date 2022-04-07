@@ -51,7 +51,7 @@ fun BakeryReport(
     val salesmenReport by viewModel.dispatchesReportCard
     val outletsReport by viewModel.outletsReportCard
     val unaccountedForDispatches by viewModel.dispatchedBreakDownReportCard
-    val moneysReportCard by viewModel.moneysReportCard
+    val profitsReportCard by viewModel.profitsReportCard
 
     Scaffold(
         topBar = {
@@ -92,7 +92,7 @@ fun BakeryReport(
                 dispatchesReport = salesmenReport,
                 outletsReport = outletsReport,
                 dispatchedBreakDownReport = unaccountedForDispatches,
-                moneysReport = moneysReportCard
+                profitsReportCard = profitsReportCard
             )
         }
     }
@@ -106,7 +106,7 @@ fun BakeryReportNavHost(
     dispatchesReport: DispatchesReportCard,
     outletsReport: OutletReportCard,
     dispatchedBreakDownReport: DispatchedBreakDown,
-    moneysReport: MoneysReportCard,
+    profitsReportCard: ProfitsReportCard,
 ) {
     NavHost(
         navController = navController,
@@ -123,7 +123,7 @@ fun BakeryReportNavHost(
             OutletsBody(outletsReport)
         }
         composable(Moneys.name){
-            MoneysScreen(moneysReport)
+            MoneysScreen(profitsReportCard)
         }
         composable(Analysis.name) {
             DispatchedBreakDownScreen(dispatchedBreakDownReport)

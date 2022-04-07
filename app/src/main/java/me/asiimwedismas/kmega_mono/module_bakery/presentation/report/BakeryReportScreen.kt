@@ -10,7 +10,7 @@ enum class BakeryReportScreen(
 ) {
     Analysis(
         icon = Icons.TwoTone.Analytics,
-        title = "Dispatch analysis"
+        title = "Profit analysis"
     ),
     Factory(
         icon = Icons.TwoTone.Business,

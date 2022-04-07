@@ -13,6 +13,7 @@ class DatedFactoryReport @Inject constructor(
     private val returnRepository: ReturnRepository,
     private val expiredRepository: ExpiredRepository,
     private val auditRepository: AuditRepository,
+    private val usedIngredientsRepository: UsedIngredientsRepository,
     private val dispatchers: CoroutineDispatchersProvider
 ) {
     suspend operator fun invoke(previous: String, date: String): FactoryReportCard =
@@ -21,6 +22,9 @@ class DatedFactoryReport @Inject constructor(
                 async { productionRepository.getProductionSheetForDate(previous) }
             val preAuditDef = async { auditRepository.getAuditForFactoryForDate(previous) }
             val preReturnsDef = async { returnRepository.getReturnsForDate(previous) }
+            val preUsedIngredientsDef = async {
+                usedIngredientsRepository.getSheetForDate(previous)
+            }
 
             val productionDef = async { productionRepository.getProductionSheetForDate(date) }
             val dispatchedDef = async { dispatchesRepository.getDispatchesForDate(date) }
@@ -31,21 +35,24 @@ class DatedFactoryReport @Inject constructor(
             val preProduction = preProductionDef.await()
             val preAudit = preAuditDef.await()
             val preReturns = preReturnsDef.await()
+            val preUsedIngredients = preUsedIngredientsDef.await()
             val production = productionDef.await()
             val dispatched = dispatchedDef.await()
             val returned = returnedDef.await()
             val factoryExpired = expiredDef.await()
             val factoryAudit = auditDef.await()
 
+
             return@withContext withContext(dispatchers.default) {
                 FactoryReportCard(
                     preProducedList = listOf(preProduction),
                     preReturnedList = preReturns,
+                    preIngredients = listOf(preUsedIngredients),
+                    preAuditedList = listOf(preAudit),
                     producedList = listOf(production),
                     dispatchedList = dispatched,
                     returnedList = returned,
                     expiredList = listOf(factoryExpired),
-                    preAuditedList = listOf(preAudit),
                     auditedList = listOf(factoryAudit)
                 )
             }
