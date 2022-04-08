@@ -15,12 +15,12 @@ fun OutletsBody(
     reportCard: OutletReportCard
 ) {
     val categories = listOf(
-        ReportCategory("Unaccounted for", reportCard.unaccountedFor, ColorsIndigo200),
-        ReportCategory("Cash handovers", reportCard.handovers, ColorsBlue500),
-        ReportCategory("Expenditure", reportCard.expenditure, ColorsGreen500),
-        ReportCategory("Expired", reportCard.expired, ColorsYellow200),
-        ReportCategory("Verified stock balance", reportCard.closingStock, ColorsViolet500),
-        ReportCategory("Audited shortage", reportCard.auditedShortage, ColorsRed500),
+        ReportCategory("Unaccounted for", reportCard.unaccountedFor, Indigo200),
+        ReportCategory("Cash handovers", reportCard.handovers, Blue500),
+        ReportCategory("Expenditure", reportCard.expenditure, Green500),
+        ReportCategory("Expired", reportCard.expired, Yellow200),
+        ReportCategory("Verified stock balance", reportCard.closingStock, Violet500),
+        ReportCategory("Audited shortage", reportCard.auditedShortage, Red500),
     )
 
     StatementBody(

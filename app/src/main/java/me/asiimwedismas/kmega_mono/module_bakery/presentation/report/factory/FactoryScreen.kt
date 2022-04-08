@@ -15,10 +15,10 @@ fun FactoryBody(
     reportCard: FactoryReportCard
 ) {
     val categories = listOf(
-        ReportCategory("Unaccounted for", reportCard.unaccountedFor, ColorsRed200),
-        ReportCategory("Dispatches", reportCard.dispatched, ColorsBlue200),
-        ReportCategory("In-house damages", reportCard.expired, ColorsYellow200),
-        ReportCategory("Counted balance", reportCard.audited, ColorsGreen200),
+        ReportCategory("Unaccounted for", reportCard.unaccountedFor, Red200),
+        ReportCategory("Dispatches", reportCard.dispatched, Blue200),
+        ReportCategory("In-house damages", reportCard.expired, Yellow200),
+        ReportCategory("Counted balance", reportCard.audited, Green200),
     )
 
     StatementBody(

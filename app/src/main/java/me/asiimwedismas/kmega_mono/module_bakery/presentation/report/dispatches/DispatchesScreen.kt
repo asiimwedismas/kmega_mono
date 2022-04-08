@@ -15,15 +15,15 @@ fun DispatchesBody(
     reportCard: DispatchesReportCard,
 ) {
     val categories = listOf(
-        ReportCategory("Unaccounted for", reportCard.unaccounted, ColorsCyan200),
+        ReportCategory("Unaccounted for", reportCard.unaccounted, Cyan200),
         ReportCategory("Cash handovers", reportCard.handovers, Pink40),
-        ReportCategory("Salesmen shortages", reportCard.salesmenShortages, ColorsCyan200),
-        ReportCategory("Outlet deliveries", reportCard.outletsDeliveries, ColorsOrange200),
-        ReportCategory("Agent discounts", reportCard.agentDiscounts, ColorsYellow200),
-        ReportCategory("Debit sales", reportCard.debitSales, ColorsGreen200),
-        ReportCategory("Field expenditures", reportCard.fieldExpenditures, ColorsBlue200),
-        ReportCategory("Returns", reportCard.returns, ColorsIndigo200),
-        ReportCategory("Field replacements", reportCard.fieldReplacements, ColorsViolet200),
+        ReportCategory("Salesmen shortages", reportCard.salesmenShortages, Cyan200),
+        ReportCategory("Outlet deliveries", reportCard.outletsDeliveries, Orange200),
+        ReportCategory("Agent discounts", reportCard.agentDiscounts, Yellow200),
+        ReportCategory("Debit sales", reportCard.debitSales, Green200),
+        ReportCategory("Field expenditures", reportCard.fieldExpenditures, Blue200),
+        ReportCategory("Returns", reportCard.returns, Indigo200),
+        ReportCategory("Field replacements", reportCard.fieldReplacements, Violet200),
     )
 
     StatementBody(

@@ -61,7 +61,7 @@ data class ProfitsReportCard(
             ReportCategory(
                 "Profit balance",
                 profitBalance,
-                ColorsGreen500
+                Green500
             )
         )
 
@@ -69,7 +69,7 @@ data class ProfitsReportCard(
             ReportCategory(
                 "Expired & Damages",
                 expired,
-                ColorsRed200
+                Red200
             )
         )
 
@@ -77,7 +77,7 @@ data class ProfitsReportCard(
             ReportCategory(
                 "Shortages",
                 shortages,
-                ColorsYellow200
+                Yellow200
             )
         )
 
@@ -101,18 +101,18 @@ data class ProfitsReportCard(
             ReportCategory(
                 "Agent discounts",
                 dispatchesReportCard.agentDiscounts,
-                ColorsViolet200
+                Violet200
             )
         )
 
         val colors = listOf(
-            ColorsRed200,
-            ColorsOrange200,
-            ColorsYellow200,
-            ColorsBlue200,
-            ColorsIndigo200,
-            ColorsViolet200,
-            ColorsCyan200,
+            Red200,
+            Orange200,
+            Yellow200,
+            Blue200,
+            Indigo200,
+            Violet200,
+            Cyan200,
             Purple40,
             PurpleGrey40,
             Pink40
@@ -125,7 +125,7 @@ data class ProfitsReportCard(
                 ReportCategory(
                     entry.value.category,
                     entry.value.amount.toLong(),
-                    ColorsCyan200
+                    Cyan200
                 )
             )
         }
