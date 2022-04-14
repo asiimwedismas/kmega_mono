@@ -3,9 +3,9 @@ package me.asiimwedismas.kmega_mono.ui.common_components
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -15,7 +15,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.window.PopupProperties
 
-@OptIn(ExperimentalComposeUiApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun <T> AutoCompleteTextView(
     modifier: Modifier = Modifier,
@@ -47,7 +47,7 @@ fun <T> AutoCompleteTextView(
                     IconButton(onClick = { onClearClick() }) {
                         Icon(imageVector = Icons.Filled.Clear, contentDescription = "clear")
                     }
-                }else{
+                } else {
                     ExposedDropdownMenuDefaults.TrailingIcon(
                         expanded = predictions.isNotEmpty()
                     )
@@ -72,11 +72,13 @@ fun <T> AutoCompleteTextView(
             ) {
                 predictions.forEach { prediction ->
                     DropdownMenuItem(
+                        text = {
+                            Text(text = prediction.toString())
+                        },
                         onClick = {
                             onOptionSelected(prediction)
-                        }) {
-                        Text(text = prediction.toString())
-                    }
+                        }
+                    )
                 }
             }
         }
