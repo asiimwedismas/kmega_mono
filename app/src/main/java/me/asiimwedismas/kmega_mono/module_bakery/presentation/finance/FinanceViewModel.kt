@@ -220,7 +220,7 @@ class FinanceViewModel @Inject constructor(
                 category = selectedOption!!.category,
                 explanation = inputExplanation,
                 isIngredient = selectedOption!!.isIngredient,
-                amount = amount
+                amount = amount!!
             )
             transactionsSheet.items.add(transaction)
             saveSheet()

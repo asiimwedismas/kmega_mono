@@ -95,7 +95,7 @@ fun FinanceScreen(
                 onDismiss = viewModel::toggleShowCalendar
             )
         }
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column() {
             if (isLoadingData) {
                 LinearProgressIndicator(
                     modifier = Modifier.fillMaxWidth()

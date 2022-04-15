@@ -1,12 +1,12 @@
 package me.asiimwedismas.kmega_mono.module_bakery.presentation.common_components
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.*
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,6 +20,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import me.asiimwedismas.kmega_mono.module_bakery.domain.model.TransactionCategory
 import me.asiimwedismas.kmega_mono.ui.common_components.AutoCompleteTextView
+import java.text.NumberFormat
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -39,7 +40,9 @@ fun AddSafeTransactionForm(
     submit: Boolean,
     onAddItem: () -> Unit,
 ) {
-    ItemInputBackground(elevate = true) {
+    ItemInputBackground(
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
+        elevate = true) {
         Column() {
             AutoCompleteTextView(
                 label = label,
@@ -53,7 +56,7 @@ fun AddSafeTransactionForm(
             )
             Spacer(modifier = Modifier.height(8.dp))
             val keyboardController = LocalSoftwareKeyboardController.current
-            OutlinedTextField(
+            TextField(
                 modifier = Modifier.fillMaxWidth(),
                 label = {
                     Text(text = "Explanation")
@@ -71,10 +74,16 @@ fun AddSafeTransactionForm(
                 })*/
             )
             Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
+            TextField(
                 modifier = Modifier.fillMaxWidth(),
                 label = {
-                    Text(text = "Amount")
+                    val formatAttempt = amount.toIntOrNull()
+                    val formattedAmount =
+                        if (formatAttempt != null)
+                            NumberFormat.getInstance().format(formatAttempt)
+                        else
+                            ""
+                    Text(text = "Amount $formattedAmount")
                 },
                 value = amount,
                 onValueChange = onAmountChanged,
@@ -89,7 +98,7 @@ fun AddSafeTransactionForm(
                 })
             )
             Spacer(modifier = Modifier.height(8.dp))
-            OutlinedButton(
+            FilledTonalButton(
                 onClick = onAddItem,
                 enabled = submit,
             ) {
@@ -112,11 +121,11 @@ class AddSafeTransactionFormState(
     var inputAmount by mutableStateOf("")
     var submit by mutableStateOf(false)
 
-    var amount: Int = 0
+    var amount: Int? = null
     var selectedOption: TransactionCategory? = null
 
     private fun shouldEnableSave() {
-        submit = (amount != 0 && selectedOption != null)
+        submit = (amount != null && amount != 0 && selectedOption != null)
     }
 
     fun onQueryChanged(newQuery: String) {
@@ -133,7 +142,7 @@ class AddSafeTransactionFormState(
         this.inputAmount = inputAmount
 
         amount = if (inputAmount.isNotBlank()) {
-            inputAmount.toInt()
+            inputAmount.toIntOrNull()
         } else {
             0
         }

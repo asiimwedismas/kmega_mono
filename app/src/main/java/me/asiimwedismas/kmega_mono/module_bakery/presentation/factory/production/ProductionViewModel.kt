@@ -145,7 +145,7 @@ class ProductionViewModel @Inject constructor(
 
     fun onAddItem() {
         with(addProductFormState) {
-            val item = FactoryProductionItem(selectedOption!!, qty.toInt())
+            val item = FactoryProductionItem(selectedOption!!, qty!!.toInt())
             productionSheet.items.add(item)
             saveProductionSheet()
             clearInputs()

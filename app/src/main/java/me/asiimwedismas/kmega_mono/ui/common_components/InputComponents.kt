@@ -35,7 +35,7 @@ fun <T> AutoCompleteTextView(
             onTogglePredictions()
         }
     ) {
-        OutlinedTextField(
+        TextField(
             modifier = modifier
                 .fillMaxWidth(),
             value = query,

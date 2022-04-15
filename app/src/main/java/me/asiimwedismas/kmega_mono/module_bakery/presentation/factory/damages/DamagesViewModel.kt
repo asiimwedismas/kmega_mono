@@ -147,7 +147,7 @@ class DamagesViewModel @Inject constructor(
 
     fun onAddItem() {
         with(addProductFormState) {
-            val item = BakeryInvoiceItem(selectedOption!!, qty.toInt())
+            val item = BakeryInvoiceItem(selectedOption!!, qty!!.toInt())
             expiredInvoice.items.add(item)
             saveProductionSheet()
             clearInputs()

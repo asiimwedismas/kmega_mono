@@ -140,7 +140,7 @@ class UsedIngredientsViewModel @Inject constructor(
 
     fun onAddItem() {
         with(addIngredientFormState) {
-            val ingredient = UsedIngredientItem(selectedOption!!, qty)
+            val ingredient = UsedIngredientItem(selectedOption!!, qty!!)
             usedIngredientsSheet.items.add(ingredient)
             saveIngredientsSheet()
             qtyInputHint = "Qty"

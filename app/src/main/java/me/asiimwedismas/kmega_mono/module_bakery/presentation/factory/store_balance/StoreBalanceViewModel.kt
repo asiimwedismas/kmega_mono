@@ -147,7 +147,7 @@ class StoreBalanceViewModel @Inject constructor(
 
     fun onAddItem() {
         with(addProductFormState) {
-            val item = BakeryInvoiceItem(selectedOption!!, qty.toInt())
+            val item = BakeryInvoiceItem(selectedOption!!, qty!!.toInt())
             storeBalanceInvoice.items.add(item)
             saveProductionSheet()
             clearInputs()
