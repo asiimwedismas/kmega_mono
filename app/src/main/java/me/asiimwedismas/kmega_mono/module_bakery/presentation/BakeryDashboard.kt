@@ -1,6 +1,8 @@
 package me.asiimwedismas.kmega_mono.module_bakery.presentation
 
 import androidx.compose.animation.rememberSplineBasedDecay
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -36,6 +38,7 @@ fun BakeryDashboard() {
         navController = navController,
         startDestination = "home",
     ) {
+
         composable("home") {
             Scaffold(
                 modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -47,13 +50,15 @@ fun BakeryDashboard() {
                         scrollBehavior = scrollBehavior
                     )
                 }
-            ) {
-                BakeryScreensTabRow(allScreens = allScreens,
-                    onTabSelected = { screen ->
-                        navController.navigate(screen.name)
-                    },
-                    currentScreen = currentScreen
-                )
+            ) { innerPadding ->
+                Surface(Modifier.padding(innerPadding)) {
+                    BakeryScreensTabRow(allScreens = allScreens,
+                        onTabSelected = { screen ->
+                            navController.navigate(screen.name)
+                        },
+                        currentScreen = currentScreen
+                    )
+                }
             }
         }
         composable(Ingredients.name) {

@@ -34,7 +34,7 @@ data class FactoryReportCard(
     var closingStock: Long = 0
         private set
 
-    lateinit var dispatchedBreakDown: DispatchedBreakDown
+    var dispatchedBreakDown: DispatchedBreakDown
     private set
 
     init {

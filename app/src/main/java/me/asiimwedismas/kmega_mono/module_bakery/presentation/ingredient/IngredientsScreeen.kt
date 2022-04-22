@@ -2,6 +2,7 @@ package me.asiimwedismas.kmega_mono.module_bakery.presentation.ingredient
 
 import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -45,8 +46,10 @@ fun IngredientScreen(
             AddIngredientFAB {
             }
         },
-        content = {
-            IngredientList(ingredientList)
+        content = { innerPadding ->
+            Surface(Modifier.padding(innerPadding)) {
+                IngredientList(ingredientList)
+            }
         }
     )
 }

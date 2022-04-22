@@ -41,7 +41,7 @@ fun AddSafeTransactionForm(
     onAddItem: () -> Unit,
 ) {
     ItemInputBackground(
-        modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
+        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp),
         elevate = true) {
         Column() {
             AutoCompleteTextView(
@@ -63,7 +63,7 @@ fun AddSafeTransactionForm(
                 },
                 value = explanation,
                 onValueChange = onExplanationChanged,
-                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+                colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
                 maxLines = 1,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Done,
@@ -87,7 +87,7 @@ fun AddSafeTransactionForm(
                 },
                 value = amount,
                 onValueChange = onAmountChanged,
-                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+                colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
                 maxLines = 1,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Done,

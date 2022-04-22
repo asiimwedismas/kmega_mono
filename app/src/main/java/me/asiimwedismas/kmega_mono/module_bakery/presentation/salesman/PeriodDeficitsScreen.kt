@@ -63,7 +63,7 @@ fun PeriodDeficitsReport(
             )
         },
 
-        ) {
+        ) { innerPadding ->
         if (showCalendar) {
             val now = viewModel.dates.instance.value!!.timeInMillis
             DateRangePickerDialog(
@@ -74,6 +74,7 @@ fun PeriodDeficitsReport(
         }
         val swipeRefreshState = rememberSwipeRefreshState(isMakingReport)
         SwipeRefresh(
+            modifier = Modifier.padding(innerPadding),
             state = swipeRefreshState,
             onRefresh = viewModel::makeReport
         ) {

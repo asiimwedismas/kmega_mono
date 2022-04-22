@@ -87,7 +87,7 @@ fun FinanceScreen(
                 AddItemFAB(viewModel::onAddFabClick)
             }
         }
-    ) {
+    ) { innerPadding ->
         if (showCalendar) {
             DatePickerDialog(
                 currentSelected = viewModel.dates.instance.value!!.timeInMillis,
@@ -95,7 +95,9 @@ fun FinanceScreen(
                 onDismiss = viewModel::toggleShowCalendar
             )
         }
-        Column() {
+        Column(
+            Modifier.padding(innerPadding)
+        ) {
             if (isLoadingData) {
                 LinearProgressIndicator(
                     modifier = Modifier.fillMaxWidth()

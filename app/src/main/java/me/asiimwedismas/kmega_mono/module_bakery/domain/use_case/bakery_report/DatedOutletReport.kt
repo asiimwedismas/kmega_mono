@@ -17,7 +17,7 @@ class DatedOutletReport @Inject constructor(
             val outletSheet = outletStandingsPred.await()
 
             withContext(dispatchersProvider.default) {
-                return@withContext OutletReportCard(
+                OutletReportCard(
                     outletsDaySheet = outletSheet
                 )
             }

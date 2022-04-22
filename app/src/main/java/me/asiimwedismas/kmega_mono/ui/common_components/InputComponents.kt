@@ -59,7 +59,7 @@ fun <T> AutoCompleteTextView(
                 onImeAction()
                 keyboardController?.hide()
             }),
-            colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+            colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
         )
         if (predictions.isNotEmpty()) {
             DropdownMenu(
@@ -98,7 +98,7 @@ fun InputText(
     TextField(
         value = text,
         onValueChange = onTextChange,
-        colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+        colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
         maxLines = 1,
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = {

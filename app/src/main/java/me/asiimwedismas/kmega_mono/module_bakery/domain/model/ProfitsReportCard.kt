@@ -40,7 +40,7 @@ data class ProfitsReportCard(
                 )
 
         val transactionsMap: MutableMap<String, SafeTransactionItem> = TreeMap()
-        safeExpenditureSheet.items.forEachIndexed { index, entry ->
+        safeExpenditureSheet.items.forEachIndexed { _, entry ->
             val category = entry.category
             if (transactionsMap.containsKey(category)) {
                 transactionsMap[category]?.apply {
@@ -120,7 +120,7 @@ data class ProfitsReportCard(
 
 
 
-        transactionsMap.entries.forEachIndexed { i, entry ->
+        transactionsMap.entries.forEachIndexed { _, entry ->
             reportCategories.add(
                 ReportCategory(
                     entry.value.category,
