@@ -82,12 +82,12 @@ fun BakeryReport(
 
         val swipeRefreshState = rememberSwipeRefreshState(isMakingReport)
         SwipeRefresh(
+            modifier = Modifier.padding(innerPadding),
             state = swipeRefreshState,
             onRefresh = viewModel::makeReport
         ) {
             BakeryReportNavHost(
                 navController,
-                modifier = Modifier.padding(innerPadding),
                 factoryReportCard = factoryReportCard,
                 dispatchesReport = salesmenReport,
                 outletsReport = outletsReport,
@@ -101,7 +101,6 @@ fun BakeryReport(
 @Composable
 fun BakeryReportNavHost(
     navController: NavHostController,
-    modifier: Modifier,
     factoryReportCard: FactoryReportCard,
     dispatchesReport: DispatchesReportCard,
     outletsReport: OutletReportCard,
@@ -111,7 +110,6 @@ fun BakeryReportNavHost(
     NavHost(
         navController = navController,
         startDestination = Analysis.name,
-        modifier = modifier
     ) {
         composable(Factory.name) {
             FactoryBody(factoryReportCard)
