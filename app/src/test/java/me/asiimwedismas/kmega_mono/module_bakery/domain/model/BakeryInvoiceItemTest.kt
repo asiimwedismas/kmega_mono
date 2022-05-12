@@ -1,9 +1,6 @@
 package me.asiimwedismas.kmega_mono.module_bakery.domain.model
 
-import me.asiimwedismas.bakery_module.domain.model.BakeryInvoiceItem
-import me.asiimwedismas.bakery_module.domain.model.BakeryProduct
-import me.asiimwedismas.bakery_module.domain.model.calculateSalesAndProfits
-import org.junit.Assert.*
+import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 
 import org.junit.Test
@@ -14,54 +11,64 @@ class BakeryInvoiceItemTest {
     lateinit var breadInvoiceItem: BakeryInvoiceItem
 
     @Before
-    fun setUp(){
+    fun setUp() {
         bread = BakeryProduct(
             "Bread",
             1,
-            99.0,
-            72.0,
-            4_000.0,
-            4_200.0,
-            169_410.0,
-            65_700.0,
-            3_800.0
+            99,
+            72,
+            4_000,
+            4_200,
+            169_410,
+            65_700,
+            3_800
         )
 
-        breadInvoiceItem = BakeryInvoiceItem(
-            "Bread",
-            1
-        )
-
-        breadInvoiceItem.calculateSalesAndProfits(bread)
+        breadInvoiceItem = BakeryInvoiceItem(bread, 1)
     }
 
     @Test
     fun `factory sales are calculated properly`() {
-        assertEquals("factory sales",4000.0,breadInvoiceItem.total_factory_sale,0.1)
+        assertThat(breadInvoiceItem.total_factory_sale).isEqualTo(4000)
     }
 
     @Test
     fun `factory profits are calculated properly`() {
-        assertEquals("factory profits",1_548.0,breadInvoiceItem.factory_profit,0.1)
+        assertThat(breadInvoiceItem.factory_profit_gross).isEqualTo(1_548)
     }
 
     @Test
     fun `outlet sales are calculated properly`() {
-        assertEquals("outlet sales",4_200.0,breadInvoiceItem.total_outlet_sale,0.1)
+        assertThat(breadInvoiceItem.total_outlet_sale).isEqualTo(4_200)
     }
 
     @Test
     fun `outlet profits are calculated properly`() {
-        assertEquals("outlet profits",1_748.0,breadInvoiceItem.outlet_profit,0.1)
+        assertThat(breadInvoiceItem.outlet_profit_gross).isEqualTo(1_748)
     }
 
     @Test
     fun `agent sales are calculated properly`() {
-        assertEquals("agent sales", 3_800.0, breadInvoiceItem.total_agent_sale, 0.1)
+        assertThat(breadInvoiceItem.total_agent_sale).isEqualTo(3_800)
     }
 
     @Test
     fun `agent profits are calculated properly`() {
-        assertEquals("agent profits", 1_348.0, breadInvoiceItem.agent_profit, 0.1)
+        assertThat(breadInvoiceItem.agent_profit_gross).isEqualTo(1_348)
+    }
+
+    @Test
+    fun `agent net profits are calculated properly`() {
+        assertThat(breadInvoiceItem.agent_profit_net).isEqualTo(435)
+    }
+
+    @Test
+    fun `factory net profits are calculated properly`() {
+        assertThat(breadInvoiceItem.factory_profit_net).isEqualTo(635)
+    }
+
+    @Test
+    fun `outlet net profits are calculated properly`() {
+        assertThat(breadInvoiceItem.outlet_profit_net).isEqualTo(835)
     }
 }

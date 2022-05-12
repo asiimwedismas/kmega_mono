@@ -3,20 +3,20 @@ package me.asiimwedismas.kmega_mono.module_bakery.data.local.data_source
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import androidx.room.OnConflictStrategy.IGNORE
-import kotlinx.coroutines.flow.Flow
-import me.asiimwedismas.bakery_module.domain.model.BakeryIngredient
+import androidx.room.OnConflictStrategy.REPLACE
+import me.asiimwedismas.kmega_mono.module_bakery.domain.model.BakeryIngredient
 
 @Dao
 interface IngredientDao {
 
-    @Insert(onConflict = IGNORE)
-    suspend fun insert(vararg ingredients: BakeryIngredient)
+    @Insert(onConflict = REPLACE)
+    suspend fun insert(ingredients: List<BakeryIngredient>)
 
     @Update
-    suspend fun update(vararg ingredients: BakeryIngredient)
+    suspend fun update(ingredients: List<BakeryIngredient>)
 
     @Delete
-    suspend fun delete(vararg ingredients: BakeryIngredient)
+    suspend fun delete(ingredients: List<BakeryIngredient>)
 
     @Query("SELECT * FROM bakery_ingredients ORDER BY ingredient_name")
     fun getAllIngredients(): LiveData<List<BakeryIngredient>>

@@ -1,83 +1,76 @@
 package me.asiimwedismas.kmega_mono.module_bakery.domain.model
 
-import me.asiimwedismas.bakery_module.domain.model.BakeryInvoice
-import me.asiimwedismas.bakery_module.domain.model.BakeryInvoiceItem
-import me.asiimwedismas.bakery_module.domain.model.BakeryProduct
-import me.asiimwedismas.bakery_module.domain.model.calculateSalesAndProfits
-import org.junit.Assert.*
+import com.google.common.truth.Truth
 
 import org.junit.Before
 import org.junit.Test
 
 class BakeryInvoiceTest {
 
-    val bread = BakeryProduct(
+    private val bread = BakeryProduct(
         "Bread",
         1,
-        99.0,
-        72.0,
-        4_000.0,
-        4_200.0,
-        169_410.0,
-        65_700.0,
-        3_800.0
+        99,
+        72,
+        4_000,
+        4_200,
+        169_410,
+        65_700,
+        3_800
     )
-
-    val bun = BakeryProduct(
-        "Bun",
-        6,
-        75.0,
-        250.0,
-        1_000.0,
-        1_000.0,
-        172_475.0,
-        65_700.0,
-        900.0
-    )
-
     lateinit var invoice: BakeryInvoice
 
     @Before
     fun setUp() {
-        val bun = BakeryInvoiceItem("Bun", 1).also {
-            it.calculateSalesAndProfits(bun)
-        }
-        val bread = BakeryInvoiceItem("Bread", 1).also {
-            it.calculateSalesAndProfits(bread)
-        }
+        val bread = BakeryInvoiceItem(bread, 1)
 
         invoice = BakeryInvoice(
-            items_list = listOf(bun, bread)
+            items = mutableListOf(bread, bread)
         )
     }
 
     @Test
     fun calculateTotalFactoryProfit() {
-        assertEquals("factory profits ", 1_783.0, invoice.calculateTotalFactoryProfit(), 0.2)
+        Truth.assertThat(invoice.totalFactoryProfitGross).isEqualTo(3096)
     }
 
     @Test
     fun calculateTotalOutletProfit() {
-        assertEquals("outlet profits ", 1_983.0, invoice.calculateTotalOutletProfit(), 0.2)
+        Truth.assertThat(invoice.totalOutletProfitGross).isEqualTo(3496)
     }
 
     @Test
     fun calculateTotalAgentProfit() {
-        assertEquals("agent profits ", 1_483.0, invoice.calculateTotalAgentProfit(), 0.2)
+        Truth.assertThat(invoice.totalAgentProfitGross).isEqualTo(2696)
     }
 
     @Test
     fun calculateTotalTotalAgentSale() {
-        assertEquals("agent sales ", 4_700.0, invoice.calculateTotalTotalAgentSale(), 0.2)
+        Truth.assertThat(invoice.totalAgentSale).isEqualTo(7600)
     }
 
     @Test
     fun calculateTotalFactorySale() {
-        assertEquals("factory sales ", 5_000.0, invoice.calculateTotalFactorySale(), 0.2)
+        Truth.assertThat(invoice.totalFactorySale).isEqualTo(8000)
     }
 
     @Test
     fun calculateTotalOutletSale() {
-        assertEquals("outlet sales ", 5_200.0, invoice.calculateTotalOutletSale(), 0.2)
+        Truth.assertThat(invoice.totalOutletSale).isEqualTo(8400)
+    }
+
+    @Test
+    fun calculateTotalFactoryProfitNet() {
+        Truth.assertThat(invoice.totalFactoryProfitNet).isEqualTo(1270)
+    }
+
+    @Test
+    fun calculateTotalOutletProfitNet() {
+        Truth.assertThat(invoice.totalOutletProfitNet).isEqualTo(1670)
+    }
+
+    @Test
+    fun calculateTotalAgentProfitNet() {
+        Truth.assertThat(invoice.totalAgentProfitNet).isEqualTo(870)
     }
 }
