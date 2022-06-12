@@ -14,6 +14,7 @@ import me.asiimwedismas.kmega_mono.module_bakery.domain.repository.FinancesRepos
 import java.text.DateFormat
 import java.util.*
 import javax.inject.Inject
+import kotlin.math.abs
 
 data class SalesmanDeficitReport(
     var name: String,
@@ -21,6 +22,7 @@ data class SalesmanDeficitReport(
     var debit_paid: Int,
     var shortages: Int,
     var excesses: Int,
+    var absoluteShortageExcess: Int
 )
 
 @HiltViewModel
@@ -104,12 +106,19 @@ class PeriodDeficitsViewModel @Inject constructor(
                     debit_paid = handover.debits_paid_ed,
                     excesses = if (handover.variance_ed > 0) handover.variance_ed else 0,
                     shortages = if (handover.variance_ed < 0) handover.variance_ed else 0,
+                    absoluteShortageExcess = 0
                 )
                 handoversTree.putIfAbsent(salesman, newItem)
             }
         }
 
-        _reportList.value = handoversTree.entries.map { it.value }
+        _reportList.value = handoversTree.entries.map {
+            with(it.value) {
+                absoluteShortageExcess =
+                    abs(debit_paid) + abs(excesses) - abs(debit_sales) - abs(shortages)
+            }
+            it.value
+        }
         _makingReport.value = false
     }
 }

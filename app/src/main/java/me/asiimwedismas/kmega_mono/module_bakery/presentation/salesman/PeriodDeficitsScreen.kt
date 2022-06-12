@@ -108,7 +108,7 @@ fun ReportItemHolder(numberFormat: NumberFormat, item: SalesmanDeficitReport) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = item.name,
+            text = "${ item.name } (${numberFormat.format(item.absoluteShortageExcess)})",
             style = MaterialTheme.typography.titleMedium
         )
         IconButton(
