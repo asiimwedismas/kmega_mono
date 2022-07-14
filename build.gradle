@@ -3,7 +3,7 @@ buildscript {
     ext {
         compose_version = '1.2.0-rc02'
         dagger_hilt_version = '2.40.1'
-        kotlin_version = '1.6.21'
+        kotlin_version = '1.7.10'
         coroutines_version = '1.6.0'
         lifecycle_version = '2.4.1'
         room_version = '2.4.1'
@@ -26,6 +26,53 @@ buildscript {
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+    }
+}
+
+subprojects {
+    afterEvaluate { project ->
+        if (project.hasProperty('android')) {
+            android {
+                compileSdk 32
+
+                defaultConfig {
+                    minSdk 26
+                    targetSdk 32
+                    versionCode 1
+                    versionName "1.0"
+
+                    testInstrumentationRunner "me.asiimwedismas.kmega_mono.CustomHiltTestRunner"
+                    vectorDrawables {
+                        useSupportLibrary true
+                    }
+                }
+
+                buildTypes {
+                    release {
+                        minifyEnabled true
+                        proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+                    }
+                }
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_1_8
+                    targetCompatibility JavaVersion.VERSION_1_8
+                }
+                kotlinOptions {
+                    jvmTarget = '1.8'
+                }
+                buildFeatures {
+                    compose true
+                }
+                composeOptions {
+                    kotlinCompilerExtensionVersion compose_version
+                }
+                packagingOptions {
+                    resources {
+                        excludes += '/META-INF/{AL2.0,LGPL2.1}'
+                    }
+                }
+            }
+        }
     }
 }
 
