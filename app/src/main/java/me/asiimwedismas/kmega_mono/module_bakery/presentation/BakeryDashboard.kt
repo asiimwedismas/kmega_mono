@@ -30,8 +30,9 @@ fun BakeryDashboard() {
     val currentScreen = BakeryScreen.fromRoute(backStackEntry.value?.destination?.route)
 
     val decayAnimationSpec = rememberSplineBasedDecay<Float>()
+    val topAppBarScrollState = rememberTopAppBarScrollState()
     val scrollBehavior = remember(decayAnimationSpec) {
-        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(decayAnimationSpec)
+        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(decayAnimationSpec, topAppBarScrollState)
     }
 
     NavHost(
