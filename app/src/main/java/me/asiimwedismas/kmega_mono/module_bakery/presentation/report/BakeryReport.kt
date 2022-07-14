@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -43,8 +44,9 @@ fun BakeryReport(
     val showCalendar by viewModel.showCalendar
     val isMakingReport by viewModel.makingReport
     val decayAnimationSpec = rememberSplineBasedDecay<Float>()
+    val topAppBarScrollState = rememberTopAppBarScrollState()
     val scrollBehavior = remember(decayAnimationSpec) {
-        TopAppBarDefaults.pinnedScrollBehavior { false }
+        TopAppBarDefaults.pinnedScrollBehavior(topAppBarScrollState)
     }
 
     val factoryReportCard by viewModel.factoryReportCard

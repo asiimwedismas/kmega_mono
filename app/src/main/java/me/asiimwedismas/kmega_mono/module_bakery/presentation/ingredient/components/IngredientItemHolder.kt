@@ -37,7 +37,8 @@ fun IngredientItemHolder(
             Text(
                 text = "${numberFormat.format(ingredient.ingredient_pack_qty)} ${ingredient.ingredient_pack_unit} @ ${
                     numberFormat.format(ingredient.ingredient_price)
-                }")
+                }"
+            )
         }
     )
 }
@@ -48,14 +49,14 @@ fun IngredientItemHolder(
 fun PreviewIngredientHolder() {
 
     val ingredient = BakeryIngredient(
-        "Sugar",
+        "Love",
         145000,
         50,
         "kg",
         2300
     )
 
-    androidx.compose.material3.Surface(color = MaterialTheme.colorScheme.background) {
+    Surface(color = MaterialTheme.colorScheme.background) {
         IngredientItemHolder(ingredient, NumberFormat.getNumberInstance(Locale.UK))
     }
 
